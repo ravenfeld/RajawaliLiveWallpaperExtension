@@ -13,15 +13,23 @@
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
 import rajawali.materials.textures.ATexture.TextureException;
+import fr.ravenfeld.livewallpaper.library.objects.interaction.IOffsetsChanged;
+import fr.ravenfeld.livewallpaper.library.objects.interaction.SwipeDirection;
 
-public class BackgroundSwipe extends BackgroundFixed {
+public class BackgroundSwipe extends BackgroundFixed implements IOffsetsChanged {
 	private float mWidthSwipe;
+	protected SwipeDirection mSwipeDirection;
 
 	public BackgroundSwipe(String nameTexture, int resourceId)
 			throws TextureException {
-		super(nameTexture, resourceId);
+		this(nameTexture, resourceId, SwipeDirection.NORMAL);
 	}
 
+	public BackgroundSwipe(String nameTexture, int resourceId,
+			SwipeDirection direction) throws TextureException {
+		super(nameTexture, resourceId);
+		mSwipeDirection = direction;
+	}
 
 
 	@Override
@@ -39,8 +47,21 @@ public class BackgroundSwipe extends BackgroundFixed {
 		}
 	}
 
+	@Override
 	public void offsetsChanged(float xOffset) {
+		if (mSwipeDirection == SwipeDirection.INVERSE) {
+			xOffset = -1.0f * xOffset + 1.0f;
+		}
 		mPlane.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
 	}
 
+	@Override
+	public SwipeDirection getOffsetDirection() {
+		return mSwipeDirection;
+	}
+
+	@Override
+	public void setOffsetDirection(SwipeDirection direction) {
+		mSwipeDirection = direction;
+	}
 }

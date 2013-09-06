@@ -13,18 +13,35 @@
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
 import rajawali.materials.textures.ATexture.TextureException;
+import fr.ravenfeld.livewallpaper.library.objects.interaction.IOffsetsChanged;
+import fr.ravenfeld.livewallpaper.library.objects.interaction.SwipeDirection;
 
-public class BackgroundGIFSwipe extends BackgroundGIFFixed {
+public class BackgroundGIFSwipe extends BackgroundGIFFixed implements
+		IOffsetsChanged {
 	private float mWidthSwipe;
+	protected SwipeDirection mSwipeDirection;
 
 	public BackgroundGIFSwipe(String nameTexture, int resourceId)
 			throws TextureException {
-		super(nameTexture, resourceId);
+		this(nameTexture, resourceId, SwipeDirection.NORMAL);
 	}
 
 	public BackgroundGIFSwipe(String nameTexture, int resourceID,
 			int textureSize) throws TextureException {
-		super(nameTexture, resourceID, textureSize);
+		this(nameTexture, resourceID, textureSize, SwipeDirection.NORMAL);
+	}
+
+	public BackgroundGIFSwipe(String nameTexture, int resourceID,
+			SwipeDirection direction) throws TextureException {
+		super(nameTexture, resourceID);
+		setOffsetDirection(direction);
+	}
+
+	public BackgroundGIFSwipe(String nameTexture, int resourceID,
+			int textureSize,
+			SwipeDirection direction) throws TextureException {
+		super(nameTexture, resourceID,textureSize);
+		setOffsetDirection(direction);
 	}
 
 	@Override
@@ -42,8 +59,20 @@ public class BackgroundGIFSwipe extends BackgroundGIFFixed {
 		}
 	}
 
+	@Override
 	public void offsetsChanged(float xOffset) {
+		if (mSwipeDirection == SwipeDirection.INVERSE) {
+			xOffset = -1.0f * xOffset + 1.0f;
+		}
 		mPlane.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
 	}
 
+	@Override
+	public SwipeDirection getOffsetDirection() {
+		return mSwipeDirection;
+	}
+	@Override
+	public void setOffsetDirection(SwipeDirection direction) {
+		mSwipeDirection = direction;
+	}
 }
