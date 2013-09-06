@@ -16,7 +16,6 @@ import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.AnimatedGIFTexture;
 import rajawali.primitives.Plane;
-import android.util.Log;
 
 public class BackgroundGIFFixed {
 	protected AnimatedGIFTexture mTexture;
@@ -90,36 +89,15 @@ public class BackgroundGIFFixed {
 		mTexture.stopAnimation();
 	}
 
-
-
 	public void update() throws TextureException {
 		mTexture.update();
 	}
 
 	public void surfaceChanged(int width, int height) {
-		Log.e("TEST", "size " + width + " " + height);
-		Log.e("TEST", "size image " + getWidth() + " " + getHeight());
-
 		float ratioDisplay = (float) height / (float) width;
-
 		float ratioSize = 1f / getHeight();
 		float taille = getWidth() * ratioSize * ratioDisplay;
-		Log.e("TEST", "ratio " + ratioSize + " " + ratioDisplay + " " + taille);
 		mPlane.setScaleX(taille);
 		mPlane.setScaleY(1);
-		// mPlane.setMaterial(mMaterial);
-		// if (ratioDisplay >= 1) {
-		// rendererPortrait(ratioDisplay);
-		// } else {
-		// rendererLandscape(ratioDisplay);
-		// }
 	}
-
-	// private void rendererLandscape(float ratioDisplay) {
-	//
-	// }
-	//
-	// private void rendererPortrait(float ratioDisplay) {
-	//
-	// }
 }
