@@ -34,14 +34,31 @@ public class BackgroundGIFSwipe extends BackgroundGIFFixed implements
 	public BackgroundGIFSwipe(String nameTexture, int resourceID,
 			SwipeDirection direction) throws TextureException {
 		super(nameTexture, resourceID);
-		setOffsetDirection(direction);
+		setSwipeDirection(direction);
 	}
 
 	public BackgroundGIFSwipe(String nameTexture, int resourceID,
 			int textureSize,
 			SwipeDirection direction) throws TextureException {
 		super(nameTexture, resourceID,textureSize);
-		setOffsetDirection(direction);
+		setSwipeDirection(direction);
+	}
+
+	public BackgroundGIFSwipe(BackgroundGIFSwipe other) {
+		super(other);
+		setFrom(other);
+	}
+
+	@Override
+	public BackgroundGIFSwipe clone() {
+		return new BackgroundGIFSwipe(this);
+	}
+
+
+	public void setFrom(BackgroundGIFSwipe other) {
+		super.setFrom(other);
+		mWidthSwipe = getWidthSwipe();
+		mSwipeDirection = getSwipeDirection();
 	}
 
 	@Override
@@ -68,11 +85,15 @@ public class BackgroundGIFSwipe extends BackgroundGIFFixed implements
 	}
 
 	@Override
-	public SwipeDirection getOffsetDirection() {
+	public SwipeDirection getSwipeDirection() {
 		return mSwipeDirection;
 	}
 	@Override
-	public void setOffsetDirection(SwipeDirection direction) {
+	public void setSwipeDirection(SwipeDirection direction) {
 		mSwipeDirection = direction;
+	}
+
+	public float getWidthSwipe() {
+		return mWidthSwipe;
 	}
 }

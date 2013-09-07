@@ -28,9 +28,24 @@ public class BackgroundSwipe extends BackgroundFixed implements IOffsetsChanged 
 	public BackgroundSwipe(String nameTexture, int resourceId,
 			SwipeDirection direction) throws TextureException {
 		super(nameTexture, resourceId);
-		mSwipeDirection = direction;
+		setSwipeDirection(direction);
 	}
 
+	public BackgroundSwipe(BackgroundSwipe other) {
+		super(other);
+		setFrom(other);
+	}
+
+	@Override
+	public BackgroundSwipe clone() {
+		return new BackgroundSwipe(this);
+	}
+
+	public void setFrom(BackgroundSwipe other) {
+		super.setFrom(other);
+		mWidthSwipe = getWidthSwipe();
+		mSwipeDirection = getSwipeDirection();
+	}
 
 	@Override
 	public void surfaceChanged(int width, int height) {
@@ -55,13 +70,18 @@ public class BackgroundSwipe extends BackgroundFixed implements IOffsetsChanged 
 		mPlane.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
 	}
 
+
 	@Override
-	public SwipeDirection getOffsetDirection() {
+	public SwipeDirection getSwipeDirection() {
 		return mSwipeDirection;
 	}
 
 	@Override
-	public void setOffsetDirection(SwipeDirection direction) {
+	public void setSwipeDirection(SwipeDirection direction) {
 		mSwipeDirection = direction;
+	}
+
+	public float getWidthSwipe() {
+		return mWidthSwipe;
 	}
 }
