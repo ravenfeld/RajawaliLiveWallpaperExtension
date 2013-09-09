@@ -61,10 +61,11 @@ public class Text {
 		mText.setTextSize(textSize);
 		mWidgetGroup.addView(mText);
 
-		float scale = context.getResources().getDisplayMetrics().density;
-		int sizeWidth = (int) ((text.length() + 1)
- * mText.getTextSize() / scale);
-		int sizeHeight = (int) (mText.getTextSize() * scale * nbLignes());
+		int sizeWidth = Math
+				.round((nbMaxCharacterLine() * mText.getTextSize() / 1.80f));
+				
+
+		int sizeHeight = Math.round(mText.getTextSize() * 1.25f * nbLignes());
 
 		Display display = ((WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -147,6 +148,23 @@ public class Text {
 		return split.length;
 	}
 
+	private int nbMaxCharacterLine() {
+		String text = mText.getText().toString();
+		String[] split = text.split("\n");
+		int nbMax = 0;
+		if (split.length == 0) {
+			nbMax = text.length() + 1;
+		} else {
+			for (int i = 0; i < split.length; i++) {
+				int lenght = split[i].length();
+				if (lenght > nbMax) {
+					nbMax = lenght + 1;
+				}
+			}
+		}
+
+		return nbMax;
+	}
 	private void draw() {
 		mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 		mWidgetGroup.draw(mCanvas);
