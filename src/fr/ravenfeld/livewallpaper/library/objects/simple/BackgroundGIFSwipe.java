@@ -26,21 +26,21 @@ public class BackgroundGIFSwipe extends BackgroundGIFFixed implements
 		this(nameTexture, resourceId, SwipeDirection.NORMAL);
 	}
 
-	public BackgroundGIFSwipe(String nameTexture, int resourceID,
+	public BackgroundGIFSwipe(String nameTexture, int resourceId,
 			int textureSize) throws TextureException {
-		this(nameTexture, resourceID, textureSize, SwipeDirection.NORMAL);
+		this(nameTexture, resourceId, textureSize, SwipeDirection.NORMAL);
 	}
 
-	public BackgroundGIFSwipe(String nameTexture, int resourceID,
+	public BackgroundGIFSwipe(String nameTexture, int resourceId,
 			SwipeDirection direction) throws TextureException {
-		super(nameTexture, resourceID);
+		super(nameTexture, resourceId);
 		setSwipeDirection(direction);
 	}
 
-	public BackgroundGIFSwipe(String nameTexture, int resourceID,
+	public BackgroundGIFSwipe(String nameTexture, int resourceId,
 			int textureSize,
 			SwipeDirection direction) throws TextureException {
-		super(nameTexture, resourceID,textureSize);
+		super(nameTexture, resourceId, textureSize);
 		setSwipeDirection(direction);
 	}
 
@@ -66,8 +66,8 @@ public class BackgroundGIFSwipe extends BackgroundGIFFixed implements
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeight();
 		float scaleX = getWidth() * ratioSize * ratioDisplay;
-		mPlane.setScaleX(scaleX);
-		mPlane.setScaleY(1);
+		mPointSprite.setScaleX(scaleX);
+		mPointSprite.setScaleY(1);
 
 		if (ratioDisplay >= 1) {
 			mWidthSwipe = scaleX;
@@ -81,7 +81,7 @@ public class BackgroundGIFSwipe extends BackgroundGIFFixed implements
 		if (mSwipeDirection == SwipeDirection.INVERSE) {
 			xOffset = -1.0f * xOffset + 1.0f;
 		}
-		mPlane.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
+		mPointSprite.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
 	}
 
 	@Override

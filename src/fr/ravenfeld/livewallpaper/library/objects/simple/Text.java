@@ -54,6 +54,7 @@ public class Text {
 
 		mText = new TextView(mContext);
 		mPlane = new Plane(1f, 1f, 1, 1);
+		mPlane.setRotY(180);
 		mPlane.setTransparent(true);
 
 		mMaterial = new Material();

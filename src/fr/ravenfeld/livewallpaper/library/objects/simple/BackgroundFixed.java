@@ -15,21 +15,22 @@ package fr.ravenfeld.livewallpaper.library.objects.simple;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
-import rajawali.primitives.Plane;
+import rajawali.primitives.PointSprite;
 
 public class BackgroundFixed {
 	protected Texture mTexture;
 	protected Material mMaterial;
-	protected Plane mPlane;
+	protected PointSprite mPointSprite;
 
-	public BackgroundFixed(String nameTexture, int resourceID)
+	public BackgroundFixed(String nameTexture, int resourceId)
 			throws TextureException {
-		mTexture = new Texture(nameTexture, resourceID);
-		mPlane = new Plane(1f, 1f, 1, 1);
+		mTexture = new Texture(nameTexture, resourceId);
+		mPointSprite = new PointSprite(1f, 1f);
+		mPointSprite.setRotY(180);
 		mMaterial = new Material();
 		mMaterial.addTexture(mTexture);
-		mPlane.setMaterial(mMaterial);
-		mPlane.setPosition(0, 0, 0);
+		mPointSprite.setMaterial(mMaterial);
+		mPointSprite.setPosition(0, 0, 0);
 	}
 
 	public BackgroundFixed(BackgroundFixed other) {
@@ -44,7 +45,7 @@ public class BackgroundFixed {
 	public void setFrom(BackgroundFixed other) {
 		mTexture = other.getTexture();
 		mMaterial = other.getMaterial();
-		mPlane = other.getObject3D();
+		mPointSprite = other.getObject3D();
 	}
 
 	public Texture getTexture() {
@@ -55,8 +56,8 @@ public class BackgroundFixed {
 		return mMaterial;
 	}
 
-	public Plane getObject3D() {
-		return mPlane;
+	public PointSprite getObject3D() {
+		return mPointSprite;
 	}
 
 	public int getWidth() {
@@ -67,11 +68,15 @@ public class BackgroundFixed {
 		return mTexture.getHeight();
 	}
 
+	public void setTransparent(boolean transparent) {
+		mPointSprite.setTransparent(transparent);
+	}
+
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeight();
 		float taille = getWidth() * ratioSize * ratioDisplay;
-		mPlane.setScaleX(taille);
-		mPlane.setScaleY(1);
+		mPointSprite.setScaleX(taille);
+		mPointSprite.setScaleY(1);
 	}
 }
