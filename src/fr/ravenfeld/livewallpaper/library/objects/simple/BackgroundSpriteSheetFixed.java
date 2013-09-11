@@ -78,7 +78,6 @@ public class BackgroundSpriteSheetFixed {
 			throws TextureException {
 		mTexture = new Texture(nameTexture, resourceID);
 		mPointSprite = new PointSprite(1f, 1f);
-		mPointSprite.setRotY(180);
 		mMaterial = new Material();
 		mMaterial.addTexture(mTexture);
 		mPointSprite.setMaterial(mMaterial);

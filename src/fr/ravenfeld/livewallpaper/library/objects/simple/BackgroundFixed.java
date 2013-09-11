@@ -16,6 +16,7 @@ import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
 import rajawali.primitives.PointSprite;
+import android.graphics.Color;
 
 public class BackgroundFixed {
 	protected Texture mTexture;
@@ -26,7 +27,6 @@ public class BackgroundFixed {
 			throws TextureException {
 		mTexture = new Texture(nameTexture, resourceId);
 		mPointSprite = new PointSprite(1f, 1f);
-		mPointSprite.setRotY(180);
 		mMaterial = new Material();
 		mMaterial.addTexture(mTexture);
 		mPointSprite.setMaterial(mMaterial);

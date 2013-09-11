@@ -31,7 +31,6 @@ public class BackgroundGIFFixed {
 			int textureSize) throws TextureException {
 		mTexture = new AnimatedGIFTexture(nameTexture, resourceId, textureSize);
 		mPointSprite = new PointSprite(1f, 1f);
-		mPointSprite.setRotY(180);
 		mMaterial = new Material();
 		mMaterial.addTexture(mTexture);
 		mTexture.rewind();
