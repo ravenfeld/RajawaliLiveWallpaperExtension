@@ -20,7 +20,7 @@ Please check out the [project](https://github.com/ravenfeld/RajawaliLiveWallpape
  Add RajawaliLiveWallpaperExtension to your project as an Android Library Project
      
 ## Developed by
-  * Alexis Lecanu alias Ravenfeld - [alexis.lecanu@gmail.com](mailto:alexis.lecanu@gmail.com)
+  * Alexis Lecanu (Ravenfeld) - [alexis.lecanu@gmail.com](mailto:alexis.lecanu@gmail.com)
     	
 ## Tested 
   * Galaxy S3
