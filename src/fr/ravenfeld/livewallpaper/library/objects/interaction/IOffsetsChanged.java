@@ -19,4 +19,6 @@ public interface IOffsetsChanged {
 	public SwipeDirection getSwipeDirection();
 
 	public void setSwipeDirection(SwipeDirection direction);
+
+	public float getWidthSwipe();
 }

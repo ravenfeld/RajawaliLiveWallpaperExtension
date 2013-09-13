@@ -17,7 +17,7 @@ import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.AnimatedGIFTexture;
 import rajawali.primitives.PointSprite;
 
-public class BackgroundGIFFixed {
+public class BackgroundGIFFixed extends ABackground {
 	protected AnimatedGIFTexture mTexture;
 	protected Material mMaterial;
 	protected PointSprite mPointSprite;
@@ -57,22 +57,27 @@ public class BackgroundGIFFixed {
 		return mTexture;
 	}
 
+	@Override
 	public Material getMaterial() {
 		return mMaterial;
 	}
 
+	@Override
 	public PointSprite getObject3D() {
 		return mPointSprite;
 	}
 
+	@Override
 	public int getWidth() {
 		return mTexture.getWidth();
 	}
 
+	@Override
 	public int getHeight() {
 		return mTexture.getHeight();
 	}
 
+	@Override
 	public void setTransparent(boolean transparent) {
 		mPointSprite.setTransparent(transparent);
 	}
@@ -97,6 +102,7 @@ public class BackgroundGIFFixed {
 		mTexture.update();
 	}
 
+	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeight();

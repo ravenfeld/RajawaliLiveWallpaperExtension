@@ -93,6 +93,7 @@ public class BackgroundGIFSwipe extends BackgroundGIFFixed implements
 		mSwipeDirection = direction;
 	}
 
+	@Override
 	public float getWidthSwipe() {
 		return mWidthSwipe;
 	}

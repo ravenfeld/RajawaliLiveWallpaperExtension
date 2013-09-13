@@ -16,9 +16,8 @@ import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
 import rajawali.primitives.PointSprite;
-import android.graphics.Color;
 
-public class BackgroundFixed {
+public class BackgroundFixed extends ABackground {
 	protected Texture mTexture;
 	protected Material mMaterial;
 	protected PointSprite mPointSprite;
@@ -52,26 +51,32 @@ public class BackgroundFixed {
 		return mTexture;
 	}
 
+	@Override
 	public Material getMaterial() {
 		return mMaterial;
 	}
 
+	@Override
 	public PointSprite getObject3D() {
 		return mPointSprite;
 	}
 
+	@Override
 	public int getWidth() {
 		return mTexture.getWidth();
 	}
 
+	@Override
 	public int getHeight() {
 		return mTexture.getHeight();
 	}
 
+	@Override
 	public void setTransparent(boolean transparent) {
 		mPointSprite.setTransparent(transparent);
 	}
 
+	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeight();
