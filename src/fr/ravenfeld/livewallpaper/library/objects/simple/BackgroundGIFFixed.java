@@ -15,12 +15,10 @@ package fr.ravenfeld.livewallpaper.library.objects.simple;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.AnimatedGIFTexture;
-import rajawali.primitives.PointSprite;
+import rajawali.primitives.Plane;
 
 public class BackgroundGIFFixed extends ABackground {
 	protected AnimatedGIFTexture mTexture;
-	protected Material mMaterial;
-	protected PointSprite mPointSprite;
 
 	public BackgroundGIFFixed(String nameTexture, int resourceId)
 			throws TextureException {
@@ -30,12 +28,13 @@ public class BackgroundGIFFixed extends ABackground {
 	public BackgroundGIFFixed(String nameTexture, int resourceId,
 			int textureSize) throws TextureException {
 		mTexture = new AnimatedGIFTexture(nameTexture, resourceId, textureSize);
-		mPointSprite = new PointSprite(1f, 1f);
+		mPlane = new Plane(1f, 1f, 1, 1);
 		mMaterial = new Material();
 		mMaterial.addTexture(mTexture);
 		mTexture.rewind();
-		mPointSprite.setMaterial(mMaterial);
-		mPointSprite.setPosition(0, 0, 0);
+		mPlane.setMaterial(mMaterial);
+		mPlane.setPosition(0, 0, 0);
+		mPlane.setRotY(180);
 	}
 
 	public BackgroundGIFFixed(BackgroundGIFFixed other) {
@@ -50,21 +49,11 @@ public class BackgroundGIFFixed extends ABackground {
 	public void setFrom(BackgroundGIFFixed other) {
 		mTexture = other.getTexture();
 		mMaterial = other.getMaterial();
-		mPointSprite = other.getObject3D();
+		mPlane = other.getObject3D();
 	}
 
 	public AnimatedGIFTexture getTexture() {
 		return mTexture;
-	}
-
-	@Override
-	public Material getMaterial() {
-		return mMaterial;
-	}
-
-	@Override
-	public PointSprite getObject3D() {
-		return mPointSprite;
 	}
 
 	@Override
@@ -75,11 +64,6 @@ public class BackgroundGIFFixed extends ABackground {
 	@Override
 	public int getHeight() {
 		return mTexture.getHeight();
-	}
-
-	@Override
-	public void setTransparent(boolean transparent) {
-		mPointSprite.setTransparent(transparent);
 	}
 
 	public void setLoop(boolean loop) {
@@ -107,7 +91,7 @@ public class BackgroundGIFFixed extends ABackground {
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeight();
 		float taille = getWidth() * ratioSize * ratioDisplay;
-		mPointSprite.setScaleX(taille);
-		mPointSprite.setScaleY(1);
+		mPlane.setScaleX(taille);
+		mPlane.setScaleY(1);
 	}
 }

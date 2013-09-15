@@ -15,7 +15,7 @@ package fr.ravenfeld.livewallpaper.library.objects.simple;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
-import rajawali.primitives.PointSprite;
+import rajawali.primitives.Plane;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -34,7 +34,7 @@ import android.widget.TextView;
 public class Text {
 	protected Texture mTexture;
 	protected Material mMaterial;
-	protected PointSprite mPointSprite;
+	protected Plane mPlane;
 	protected TextView mText;
 	private final Bitmap mBitmap;
 	private final Canvas mCanvas;
@@ -53,8 +53,9 @@ public class Text {
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 		mText = new TextView(mContext);
-		mPointSprite = new PointSprite(1, 1);
-		mPointSprite.setTransparent(true);
+		mPlane = new Plane(1f, 1f, 1, 1);
+		mPlane.setTransparent(true);
+		mPlane.setRotY(180);
 
 		mMaterial = new Material();
 		mText.setText(text);
@@ -91,7 +92,7 @@ public class Text {
 		} catch (TextureException e) {
 			e.printStackTrace();
 		}
-		mPointSprite.setMaterial(mMaterial);
+		mPlane.setMaterial(mMaterial);
 	}
 
 	public void setBackgroundColor(int color) {
@@ -126,8 +127,8 @@ public class Text {
 		draw();
 	}
 
-	public PointSprite getObject3D() {
-		return mPointSprite;
+	public Plane getObject3D() {
+		return mPlane;
 	}
 
 	public void surfaceChanged(int width, int height) {
@@ -135,11 +136,11 @@ public class Text {
 	}
 
 	public void setPosition(double x, double y, double z) {
-		mPointSprite.setPosition(x, y, z);
+		mPlane.setPosition(x, y, z);
 	}
 
 	public void setScale(double scaleX, double scaleY, double scaleZ) {
-		mPointSprite.setScale(scaleX, scaleY, scaleZ);
+		mPlane.setScale(scaleX, scaleY, scaleZ);
 	}
 
 	private int nbLignes() {

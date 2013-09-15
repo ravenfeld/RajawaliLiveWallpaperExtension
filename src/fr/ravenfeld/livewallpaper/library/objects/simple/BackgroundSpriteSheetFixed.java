@@ -16,12 +16,10 @@ import rajawali.materials.Material;
 import rajawali.materials.plugins.SpriteSheetMaterialPlugin;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
-import rajawali.primitives.PointSprite;
+import rajawali.primitives.Plane;
 
-public class BackgroundSpriteSheetFixed {
+public class BackgroundSpriteSheetFixed extends ABackground {
 	protected Texture mTexture;
-	protected Material mMaterial;
-	protected PointSprite mPointSprite;
 	protected SpriteSheetMaterialPlugin mSpriteSheet;
 	protected int mNumTilesX;
 	protected int mNumTilesY;
@@ -77,11 +75,12 @@ public class BackgroundSpriteSheetFixed {
 	private void init(String nameTexture, int resourceID)
 			throws TextureException {
 		mTexture = new Texture(nameTexture, resourceID);
-		mPointSprite = new PointSprite(1f, 1f);
+		mPlane = new Plane(1f, 1f, 1, 1);
 		mMaterial = new Material();
 		mMaterial.addTexture(mTexture);
-		mPointSprite.setMaterial(mMaterial);
-		mPointSprite.setPosition(0, 0, 0);
+		mPlane.setMaterial(mMaterial);
+		mPlane.setPosition(0, 0, 0);
+		mPlane.setRotY(180);
 	}
 
 	private void initPlugin() {
@@ -92,25 +91,20 @@ public class BackgroundSpriteSheetFixed {
 	public void setFrom(BackgroundSpriteSheetFixed other) {
 		mTexture = other.getTexture();
 		mMaterial = other.getMaterial();
-		mPointSprite = other.getObject3D();
+		mPlane = other.getObject3D();
 	}
 
 	public Texture getTexture() {
 		return mTexture;
 	}
 
-	public Material getMaterial() {
-		return mMaterial;
-	}
 
-	public PointSprite getObject3D() {
-		return mPointSprite;
-	}
-
+	@Override
 	public int getWidth() {
 		return mTexture.getWidth();
 	}
 
+	@Override
 	public int getHeight() {
 		return mTexture.getHeight();
 	}
@@ -121,10 +115,6 @@ public class BackgroundSpriteSheetFixed {
 
 	public int getHeightTile() {
 		return mTexture.getHeight() / mNumTilesY;
-	}
-
-	public void setTransparent(boolean transparent) {
-		mPointSprite.setTransparent(transparent);
 	}
 
 	public void animate() {
@@ -151,11 +141,12 @@ public class BackgroundSpriteSheetFixed {
 		return mSpriteSheet.getLoop();
 	}
 
+	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeightTile();
 		float taille = getWidthTile() * ratioSize * ratioDisplay;
-		mPointSprite.setScaleX(taille);
-		mPointSprite.setScaleY(1);
+		mPlane.setScaleX(taille);
+		mPlane.setScaleY(1);
 	}
 }

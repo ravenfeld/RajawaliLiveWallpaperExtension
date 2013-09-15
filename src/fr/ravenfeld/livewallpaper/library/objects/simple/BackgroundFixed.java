@@ -15,21 +15,22 @@ package fr.ravenfeld.livewallpaper.library.objects.simple;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
-import rajawali.primitives.PointSprite;
+import rajawali.primitives.Plane;
+import android.graphics.Bitmap;
 
 public class BackgroundFixed extends ABackground {
 	protected Texture mTexture;
-	protected Material mMaterial;
-	protected PointSprite mPointSprite;
 
 	public BackgroundFixed(String nameTexture, int resourceId)
 			throws TextureException {
 		mTexture = new Texture(nameTexture, resourceId);
-		mPointSprite = new PointSprite(1f, 1f);
-		mMaterial = new Material();
-		mMaterial.addTexture(mTexture);
-		mPointSprite.setMaterial(mMaterial);
-		mPointSprite.setPosition(0, 0, 0);
+		init();
+	}
+
+	public BackgroundFixed(String nameTexture, Bitmap bitmap)
+			throws TextureException {
+		mTexture = new Texture(nameTexture, bitmap);
+		init();
 	}
 
 	public BackgroundFixed(BackgroundFixed other) {
@@ -41,24 +42,31 @@ public class BackgroundFixed extends ABackground {
 		return new BackgroundFixed(this);
 	}
 
+	private void init() throws TextureException {
+		mPlane = new Plane(1f, 1f, 1, 1);
+		mMaterial = new Material();
+		mMaterial.addTexture(mTexture);
+		mPlane.setMaterial(mMaterial);
+		mPlane.setPosition(0, 0, 0);
+		mPlane.setRotY(180);
+	}
+
 	public void setFrom(BackgroundFixed other) {
 		mTexture = other.getTexture();
 		mMaterial = other.getMaterial();
-		mPointSprite = other.getObject3D();
+		mPlane = other.getObject3D();
+	}
+
+	public void setTexture(String nameTexture, int resourceId) {
+		mTexture.setResourceId(resourceId);
+	}
+
+	public void setTexture(Bitmap bitmap) {
+		mTexture.setBitmap(bitmap);
 	}
 
 	public Texture getTexture() {
 		return mTexture;
-	}
-
-	@Override
-	public Material getMaterial() {
-		return mMaterial;
-	}
-
-	@Override
-	public PointSprite getObject3D() {
-		return mPointSprite;
 	}
 
 	@Override
@@ -72,16 +80,11 @@ public class BackgroundFixed extends ABackground {
 	}
 
 	@Override
-	public void setTransparent(boolean transparent) {
-		mPointSprite.setTransparent(transparent);
-	}
-
-	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeight();
 		float taille = getWidth() * ratioSize * ratioDisplay;
-		mPointSprite.setScaleX(taille);
-		mPointSprite.setScaleY(1);
+		mPlane.setScaleX(taille);
+		mPlane.setScaleY(1);
 	}
 }

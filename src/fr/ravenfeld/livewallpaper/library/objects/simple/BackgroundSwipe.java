@@ -52,8 +52,8 @@ public class BackgroundSwipe extends BackgroundFixed implements IOffsetsChanged 
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeight();
 		float scaleX = getWidth() * ratioSize * ratioDisplay;
-		mPointSprite.setScaleX(scaleX);
-		mPointSprite.setScaleY(1);
+		mPlane.setScaleX(scaleX);
+		mPlane.setScaleY(1);
 
 		if (ratioDisplay >= 1) {
 			mWidthSwipe = scaleX;
@@ -67,7 +67,7 @@ public class BackgroundSwipe extends BackgroundFixed implements IOffsetsChanged 
 		if (mSwipeDirection == SwipeDirection.INVERSE) {
 			xOffset = -1.0f * xOffset + 1.0f;
 		}
-		mPointSprite.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
+		mPlane.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
 	}
 
 
@@ -81,6 +81,7 @@ public class BackgroundSwipe extends BackgroundFixed implements IOffsetsChanged 
 		mSwipeDirection = direction;
 	}
 
+	@Override
 	public float getWidthSwipe() {
 		return mWidthSwipe;
 	}

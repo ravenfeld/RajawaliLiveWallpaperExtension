@@ -1,18 +1,18 @@
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
 import rajawali.materials.Material;
-import rajawali.primitives.PointSprite;
+import rajawali.primitives.Plane;
 
 public abstract class ABackground {
 	protected Material mMaterial;
-	protected PointSprite mPointSprite;
+	protected Plane mPlane;
 
 	public Material getMaterial() {
 		return mMaterial;
 	}
 
-	public PointSprite getObject3D() {
-		return mPointSprite;
+	public Plane getObject3D() {
+		return mPlane;
 	}
 
 	public abstract int getWidth();
@@ -20,8 +20,15 @@ public abstract class ABackground {
 	public abstract int getHeight();
 
 	public void setTransparent(boolean transparent) {
-		mPointSprite.setTransparent(transparent);
+		mPlane.setTransparent(transparent);
 	}
 
+	public void setVisible(boolean visible) {
+		mPlane.setVisible(visible);
+	}
+
+	public boolean isVisible() {
+		return mPlane.isVisible();
+	}
 	public abstract void surfaceChanged(int width, int height);
 }

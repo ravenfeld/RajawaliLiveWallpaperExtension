@@ -97,8 +97,8 @@ public class BackgroundSpriteSheetSwipe extends BackgroundSpriteSheetFixed
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeightTile();
 		float scaleX = getWidthTile() * ratioSize * ratioDisplay;
-		mPointSprite.setScaleX(scaleX);
-		mPointSprite.setScaleY(1);
+		mPlane.setScaleX(scaleX);
+		mPlane.setScaleY(1);
 
 		if (ratioDisplay >= 1) {
 			mWidthSwipe = scaleX;
@@ -112,7 +112,7 @@ public class BackgroundSpriteSheetSwipe extends BackgroundSpriteSheetFixed
 		if (mSwipeDirection == SwipeDirection.INVERSE) {
 			xOffset = -1.0f * xOffset + 1.0f;
 		}
-		mPointSprite.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
+		mPlane.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
 	}
 
 
@@ -126,6 +126,7 @@ public class BackgroundSpriteSheetSwipe extends BackgroundSpriteSheetFixed
 		mSwipeDirection = direction;
 	}
 
+	@Override
 	public float getWidthSwipe() {
 		return mWidthSwipe;
 	}
