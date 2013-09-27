@@ -57,7 +57,7 @@ public class BackgroundFixed extends ABackground {
 		mPlane = other.getObject3D();
 	}
 
-	public void setTexture(String nameTexture, int resourceId) {
+	public void setTexture(int resourceId) {
 		mTexture.setResourceId(resourceId);
 	}
 
