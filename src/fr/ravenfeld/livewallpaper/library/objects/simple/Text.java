@@ -66,7 +66,7 @@ public class Text {
 				.round((nbMaxCharacterLine() * mText.getTextSize() / 1.80f));
 				
 
-		int sizeHeight = Math.round(mText.getTextSize() * 1.25f * nbLignes());
+		int sizeHeight = Math.round(mText.getTextSize() * 1.25f * nbLines());
 
 		Display display = ((WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -143,7 +143,7 @@ public class Text {
 		mPlane.setScale(scaleX, scaleY, scaleZ);
 	}
 
-	private int nbLignes() {
+	private int nbLines() {
 		String text = mText.getText().toString();
 		String[] split = text.split("\n");
 		return split.length;
@@ -157,9 +157,9 @@ public class Text {
 			nbMax = text.length() + 1;
 		} else {
 			for (int i = 0; i < split.length; i++) {
-				int lenght = split[i].length();
-				if (lenght > nbMax) {
-					nbMax = lenght + 1;
+				int length = split[i].length();
+				if (length > nbMax) {
+					nbMax = length + 1;
 				}
 			}
 		}

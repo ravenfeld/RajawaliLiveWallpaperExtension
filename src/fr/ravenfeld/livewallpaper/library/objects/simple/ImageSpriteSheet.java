@@ -16,24 +16,25 @@ import rajawali.materials.Material;
 import rajawali.materials.plugins.SpriteSheetMaterialPlugin;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
+import rajawali.math.vector.Vector2;
 import rajawali.primitives.Plane;
 
-public class BackgroundSpriteSheetFixed extends ABackground {
+public class ImageSpriteSheet extends ABackground {
 	protected Texture mTexture;
 	protected SpriteSheetMaterialPlugin mSpriteSheet;
 	protected int mNumTilesX;
 	protected int mNumTilesY;
-
-	public BackgroundSpriteSheetFixed(String nameTexture, int resourceId,
-			int numTilesX, int numTilesY) throws TextureException {
-		this(nameTexture, resourceId, numTilesX, numTilesY, numTilesX
+    protected float mSize;
+	public ImageSpriteSheet(String nameTexture, int resourceId,float size,
+                            int numTilesX, int numTilesY) throws TextureException {
+		this(nameTexture, resourceId,size, numTilesX, numTilesY, numTilesX
 				* numTilesY);
 	}
 
-	public BackgroundSpriteSheetFixed(String nameTexture, int resourceId,
-			int numTilesX, int numTilesY, int numFrames)
+	public ImageSpriteSheet(String nameTexture, int resourceId,float size,
+                            int numTilesX, int numTilesY, int numFrames)
 			throws TextureException {
-		init(nameTexture, resourceId);
+		init(nameTexture, resourceId,size);
 		mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
 				numFrames);
 		mNumTilesX = numTilesX;
@@ -41,21 +42,21 @@ public class BackgroundSpriteSheetFixed extends ABackground {
 		initPlugin();
 	}
 
-	public BackgroundSpriteSheetFixed(String nameTexture, int resourceId,
-			int numTilesX, int numTilesY, int fps, int numFrames)
+	public ImageSpriteSheet(String nameTexture, int resourceId,float size,
+                            int numTilesX, int numTilesY, int fps, int numFrames)
 			throws TextureException {
-		init(nameTexture, resourceId);
+		init(nameTexture, resourceId,size);
 		mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY, fps,
 				numFrames);
 		mNumTilesX = numTilesX;
 		mNumTilesY = numTilesY;
 		initPlugin();
 	}
-	
-	public BackgroundSpriteSheetFixed(String nameTexture, int resourceId,
-			int numTilesX, int numTilesY, long[] frameDurations)
+
+	public ImageSpriteSheet(String nameTexture, int resourceId,float size,
+                            int numTilesX, int numTilesY, long[] frameDurations)
 			throws TextureException {
-		init(nameTexture, resourceId);
+		init(nameTexture, resourceId,size);
 		mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
 				frameDurations);
 		mNumTilesX = numTilesX;
@@ -63,17 +64,18 @@ public class BackgroundSpriteSheetFixed extends ABackground {
 		initPlugin();
 	}
 
-	public BackgroundSpriteSheetFixed(BackgroundSpriteSheetFixed other) {
+	public ImageSpriteSheet(ImageSpriteSheet other) {
 		setFrom(other);
 	}
 
 	@Override
-	public BackgroundSpriteSheetFixed clone() {
-		return new BackgroundSpriteSheetFixed(this);
+	public ImageSpriteSheet clone() {
+		return new ImageSpriteSheet(this);
 	}
 
-	private void init(String nameTexture, int resourceID)
+	private void init(String nameTexture, int resourceID, float size)
 			throws TextureException {
+        mSize=size;
 		mTexture = new Texture(nameTexture, resourceID);
 		mPlane = new Plane(1f, 1f, 1, 1);
 		mMaterial = new Material();
@@ -89,7 +91,7 @@ public class BackgroundSpriteSheetFixed extends ABackground {
 		animate();
 	}
 
-	public void setFrom(BackgroundSpriteSheetFixed other) {
+	public void setFrom(ImageSpriteSheet other) {
 		mTexture = other.getTexture();
 		mMaterial = other.getMaterial();
 		mPlane = other.getObject3D();
@@ -109,6 +111,18 @@ public class BackgroundSpriteSheetFixed extends ABackground {
 	public int getHeight() {
 		return mTexture.getHeight();
 	}
+
+    public float getSize() {
+        return mSize;
+    }
+
+    public void setPosition(double x, double y){
+        mPlane.setPosition(x,y,0);
+    }
+
+    public Vector2 getPosition(){
+        return new Vector2(mPlane.getPosition().x, mPlane.getPosition().y);
+    }
 
 	public int getWidthTile() {
 		return mTexture.getWidth() / mNumTilesX;
@@ -145,9 +159,9 @@ public class BackgroundSpriteSheetFixed extends ABackground {
 	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
-		float ratioSize = 1f / getHeightTile();
+		float ratioSize = mSize / getHeightTile();
 		float scale = getWidthTile() * ratioSize * ratioDisplay;
 		mPlane.setScaleX(scale);
-		mPlane.setScaleY(1);
+		mPlane.setScaleY(mSize);
 	}
 }

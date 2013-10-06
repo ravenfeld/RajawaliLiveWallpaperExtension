@@ -12,37 +12,42 @@
  */
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
+import android.graphics.Bitmap;
+
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
+import rajawali.math.vector.Vector2;
+import rajawali.math.vector.Vector3;
 import rajawali.primitives.Plane;
-import android.graphics.Bitmap;
 
-public class BackgroundFixed extends ABackground {
+public class Image extends ABackground {
 	protected Texture mTexture;
+    protected float mSize;
 
-	public BackgroundFixed(String nameTexture, int resourceId)
+	public Image(String nameTexture, int resourceId, float size)
 			throws TextureException {
 		mTexture = new Texture(nameTexture, resourceId);
-		init();
+		init(size);
 	}
 
-	public BackgroundFixed(String nameTexture, Bitmap bitmap)
+	public Image(String nameTexture, Bitmap bitmap, float size)
 			throws TextureException {
 		mTexture = new Texture(nameTexture, bitmap);
-		init();
+		init(size);
 	}
 
-	public BackgroundFixed(BackgroundFixed other) {
+	public Image(Image other) {
 		setFrom(other);
 	}
 
 	@Override
-	public BackgroundFixed clone() {
-		return new BackgroundFixed(this);
+	public Image clone() {
+		return new Image(this);
 	}
 
-	private void init() throws TextureException {
+	private void init(float size) throws TextureException {
+        mSize=size;
 		mPlane = new Plane(1f, 1f, 1, 1);
 		mMaterial = new Material();
 		mMaterial.addTexture(mTexture);
@@ -52,7 +57,7 @@ public class BackgroundFixed extends ABackground {
         mPlane.setTransparent(true);
 	}
 
-	public void setFrom(BackgroundFixed other) {
+	public void setFrom(Image other) {
 		mTexture = other.getTexture();
 		mMaterial = other.getMaterial();
 		mPlane = other.getObject3D();
@@ -80,12 +85,24 @@ public class BackgroundFixed extends ABackground {
 		return mTexture.getHeight();
 	}
 
+    public float getSize() {
+        return mSize;
+    }
+
+    public void setPosition(double x, double y){
+        mPlane.setPosition(x,y,0);
+    }
+
+    public Vector2 getPosition(){
+       return new Vector2(mPlane.getPosition().x, mPlane.getPosition().y);
+    }
+
 	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
-		float ratioSize = 1f / getHeight();
+		float ratioSize = mSize / getHeight();
 		float scale = getWidth() * ratioSize * ratioDisplay;
 		mPlane.setScaleX(scale);
-		mPlane.setScaleY(1);
+		mPlane.setScaleY(mSize);
 	}
 }

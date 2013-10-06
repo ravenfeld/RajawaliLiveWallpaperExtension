@@ -102,8 +102,8 @@ public class BackgroundFixedEffect extends ABackground {
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeight();
-		float taille = getWidth() * ratioSize * ratioDisplay;
-		mPlane.setScaleX(taille);
+		float scale = getWidth() * ratioSize * ratioDisplay;
+		mPlane.setScaleX(scale);
 		mPlane.setScaleY(1);
 	}
 
