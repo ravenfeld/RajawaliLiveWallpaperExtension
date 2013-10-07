@@ -156,6 +156,14 @@ public class ImageSpriteSheet extends ABackground {
 		return mSpriteSheet.getLoop();
 	}
 
+    public void setPingPong(boolean pingPong) {
+        mSpriteSheet.setPingPong(pingPong);
+    }
+
+    public boolean getPingPong() {
+        return mSpriteSheet.getPingPong();
+    }
+
 	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
