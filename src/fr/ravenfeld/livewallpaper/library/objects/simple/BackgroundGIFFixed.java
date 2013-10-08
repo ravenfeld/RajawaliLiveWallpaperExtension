@@ -67,6 +67,15 @@ public class BackgroundGIFFixed extends ABackground {
 		return mTexture.getHeight();
 	}
 
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if(visible){
+            animate();
+        }else{
+            stopAnimation();
+        }
+    }
+
 	public void setLoop(boolean loop) {
 		mTexture.setLoop(loop);
 	}
