@@ -30,6 +30,7 @@ public class BackgroundGIFFixed extends ABackground {
 		mTexture = new AnimatedGIFTexture(nameTexture, resourceId, textureSize);
 		mPlane = new Plane(1f, 1f, 1, 1);
 		mMaterial = new Material();
+        mMaterial.setColorInfluence(0);
 		mMaterial.addTexture(mTexture);
 		mTexture.rewind();
 		mPlane.setMaterial(mMaterial);
@@ -100,8 +101,8 @@ public class BackgroundGIFFixed extends ABackground {
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
 		float ratioSize = 1f / getHeight();
-		float taille = getWidth() * ratioSize * ratioDisplay;
-		mPlane.setScaleX(taille);
+		float size = getWidth() * ratioSize * ratioDisplay;
+		mPlane.setScaleX(size);
 		mPlane.setScaleY(1);
 	}
 }

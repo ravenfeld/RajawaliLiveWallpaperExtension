@@ -45,6 +45,7 @@ public class BackgroundFixed extends ABackground {
 	private void init() throws TextureException {
 		mPlane = new Plane(1f, 1f, 1, 1);
 		mMaterial = new Material();
+        mMaterial.setColorInfluence(0);
 		mMaterial.addTexture(mTexture);
 		mPlane.setMaterial(mMaterial);
 		mPlane.setPosition(0, 0, 0);
