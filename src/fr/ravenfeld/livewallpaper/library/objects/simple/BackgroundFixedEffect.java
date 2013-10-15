@@ -12,16 +12,19 @@
  */
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
+import fr.ravenfeld.livewallpaper.library.objects.animation.SwitchTextureAnimation;
+import rajawali.animation.Animation3D;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;
 import android.graphics.Bitmap;
 
-public class BackgroundFixedEffect extends ABackground {
+public class BackgroundFixedEffect extends AImage {
 	protected Texture mTexture1;
 	protected Texture mTexture2;
 	private boolean mSens = true;
+    private SwitchTextureAnimation mSwitchTextureAnimation;
 	public BackgroundFixedEffect(String nameTexture1, int resourceId1,
 			String nameTexture2, int resourceId2)
 			throws TextureException {
@@ -50,6 +53,7 @@ public class BackgroundFixedEffect extends ABackground {
 	private void init() throws TextureException {
 		mPlane = new Plane(1f, 1f, 1, 1);
 		mMaterial = new Material();
+        mMaterial.setColorInfluence(0.0f);
 		mMaterial.addTexture(mTexture1);
 		mMaterial.addTexture(mTexture2);
 		mTexture1.setInfluence(0.0f);
@@ -57,6 +61,11 @@ public class BackgroundFixedEffect extends ABackground {
 		mPlane.setMaterial(mMaterial);
 		mPlane.setPosition(0, 0, 0);
 		mPlane.setRotY(180);
+        mSwitchTextureAnimation = new SwitchTextureAnimation();
+        mSwitchTextureAnimation.setRepeatMode(Animation3D.RepeatMode.REVERSE_INFINITE);
+        mSwitchTextureAnimation.setTransformable3D(getObject3D());
+        mSwitchTextureAnimation.setTextures(getTextures());
+        mSwitchTextureAnimation.play();
 	}
 
 	public void setFrom(BackgroundFixedEffect other) {
@@ -107,7 +116,7 @@ public class BackgroundFixedEffect extends ABackground {
 		mPlane.setScaleY(1);
 	}
 
-	public void update(float pas) {
+/*	public void update(float pas) {
 		if (mTexture1.getInfluence() < 0.0f) {
 			mSens = true;
 		} else if (mTexture1.getInfluence() > 1.0f) {
@@ -120,5 +129,12 @@ public class BackgroundFixedEffect extends ABackground {
 			mTexture1.setInfluence(mTexture1.getInfluence() - pas);
 			mTexture2.setInfluence(mTexture2.getInfluence() + pas);
 		}
-	}
+	}*/
+    public SwitchTextureAnimation getAnimation(){
+        return mSwitchTextureAnimation;
+    }
+
+    public void setDuration(long duration){
+        mSwitchTextureAnimation.setDuration(duration);
+    }
 }

@@ -19,7 +19,7 @@ import rajawali.materials.textures.Texture;
 import rajawali.math.vector.Vector2;
 import rajawali.primitives.Plane;
 
-public class ImageSpriteSheet extends ABackground {
+public class ImageSpriteSheet extends AImage {
 	protected Texture mTexture;
 	protected SpriteSheetMaterialPlugin mSpriteSheet;
 	protected int mNumTilesX;

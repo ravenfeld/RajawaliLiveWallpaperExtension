@@ -17,7 +17,7 @@ import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.AnimatedGIFTexture;
 import rajawali.primitives.Plane;
 
-public class BackgroundGIFFixed extends ABackground {
+public class BackgroundGIFFixed extends AImage {
 	protected AnimatedGIFTexture mTexture;
 
 	public BackgroundGIFFixed(String nameTexture, int resourceId)

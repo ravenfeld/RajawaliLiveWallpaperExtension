@@ -1,12 +1,12 @@
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
 import rajawali.materials.Material;
+import rajawali.materials.textures.ASingleTexture;
 import rajawali.primitives.Plane;
 
-public abstract class ABackground {
+public abstract class AImage {
 	protected Material mMaterial;
 	protected Plane mPlane;
-
 	public Material getMaterial() {
 		return mMaterial;
 	}
@@ -31,4 +31,7 @@ public abstract class ABackground {
 		return mPlane.isVisible();
 	}
 	public abstract void surfaceChanged(int width, int height);
+
+
+
 }

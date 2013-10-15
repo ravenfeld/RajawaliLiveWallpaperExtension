@@ -18,10 +18,9 @@ import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
 import rajawali.math.vector.Vector2;
-import rajawali.math.vector.Vector3;
 import rajawali.primitives.Plane;
 
-public class Image extends ABackground {
+public class Image extends AImage {
 	protected Texture mTexture;
     protected float mSize;
 

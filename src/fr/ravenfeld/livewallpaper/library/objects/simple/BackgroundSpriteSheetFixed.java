@@ -18,7 +18,7 @@ import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;
 
-public class BackgroundSpriteSheetFixed extends ABackground {
+public class BackgroundSpriteSheetFixed extends AImage {
 	protected Texture mTexture;
 	protected SpriteSheetMaterialPlugin mSpriteSheet;
 	protected int mNumTilesX;

@@ -18,7 +18,7 @@ import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;
 import android.graphics.Bitmap;
 
-public class BackgroundFixed extends ABackground {
+public class BackgroundFixed extends AImage {
 	protected Texture mTexture;
 
 	public BackgroundFixed(String nameTexture, int resourceId)
