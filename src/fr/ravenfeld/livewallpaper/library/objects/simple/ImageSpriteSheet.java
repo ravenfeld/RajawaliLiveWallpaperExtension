@@ -21,7 +21,6 @@ import rajawali.math.vector.Vector2;
 import rajawali.primitives.Plane;
 
 public class ImageSpriteSheet extends AImage {
-	protected Texture mTexture;
 	protected SpriteSheetMaterialPlugin mSpriteSheet;
 	protected int mNumTilesX;
 	protected int mNumTilesY;
@@ -99,21 +98,6 @@ public class ImageSpriteSheet extends AImage {
 		mPlane = other.getObject3D();
 	}
 
-	public Texture getTexture() {
-		return mTexture;
-	}
-
-
-	@Override
-	public int getWidth() {
-		return mTexture.getWidth();
-	}
-
-	@Override
-	public int getHeight() {
-		return mTexture.getHeight();
-	}
-
     public float getSize() {
         return mSize;
     }
@@ -174,10 +158,4 @@ public class ImageSpriteSheet extends AImage {
 		mPlane.setScaleX(scale);
 		mPlane.setScaleY(mSize);
 	}
-
-    @Override
-    public void surfaceDestroyed() throws TextureException {
-        mMaterial.removeTexture(mTexture);
-        mTexture.reset();
-    }
 }

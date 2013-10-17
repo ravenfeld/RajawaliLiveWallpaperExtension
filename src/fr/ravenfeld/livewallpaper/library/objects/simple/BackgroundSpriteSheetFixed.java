@@ -20,7 +20,6 @@ import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;
 
 public class BackgroundSpriteSheetFixed extends AImage {
-	protected Texture mTexture;
 	protected SpriteSheetMaterialPlugin mSpriteSheet;
 	protected int mNumTilesX;
 	protected int mNumTilesY;
@@ -97,21 +96,6 @@ public class BackgroundSpriteSheetFixed extends AImage {
 		mPlane = other.getObject3D();
 	}
 
-	public Texture getTexture() {
-		return mTexture;
-	}
-
-
-	@Override
-	public int getWidth() {
-		return mTexture.getWidth();
-	}
-
-	@Override
-	public int getHeight() {
-		return mTexture.getHeight();
-	}
-
 	public int getWidthTile() {
 		return mTexture.getWidth() / mNumTilesX;
 	}
@@ -160,10 +144,4 @@ public class BackgroundSpriteSheetFixed extends AImage {
 		mPlane.setScaleX(scale);
 		mPlane.setScaleY(1);
 	}
-
-    @Override
-    public void surfaceDestroyed() throws TextureException {
-        mMaterial.removeTexture(mTexture);
-        mTexture.reset();
-    }
 }

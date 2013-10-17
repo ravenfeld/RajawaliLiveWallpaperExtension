@@ -18,8 +18,7 @@ import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.AnimatedGIFTexture;
 import rajawali.primitives.Plane;
 
-public class BackgroundGIFFixed extends AImage {
-	protected AnimatedGIFTexture mTexture;
+public class BackgroundGIFFixed extends AImageGIF {
 
 	public BackgroundGIFFixed(String nameTexture, int resourceId)
 			throws TextureException {
@@ -55,20 +54,6 @@ public class BackgroundGIFFixed extends AImage {
 		mPlane = other.getObject3D();
 	}
 
-	public AnimatedGIFTexture getTexture() {
-		return mTexture;
-	}
-
-	@Override
-	public int getWidth() {
-		return mTexture.getWidth();
-	}
-
-	@Override
-	public int getHeight() {
-		return mTexture.getHeight();
-	}
-
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if(visible){
@@ -78,26 +63,6 @@ public class BackgroundGIFFixed extends AImage {
         }
     }
 
-	public void setLoop(boolean loop) {
-		mTexture.setLoop(loop);
-	}
-
-	public void rewind() {
-		mTexture.rewind();
-	}
-
-	public void animate() {
-		mTexture.animate();
-	}
-
-	public void stopAnimation() {
-		mTexture.stopAnimation();
-	}
-
-	public void update() throws TextureException {
-		mTexture.update();
-	}
-
 	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
@@ -106,10 +71,4 @@ public class BackgroundGIFFixed extends AImage {
 		mPlane.setScaleX(size);
 		mPlane.setScaleY(1);
 	}
-
-    @Override
-    public void surfaceDestroyed() throws TextureException {
-        mMaterial.removeTexture(mTexture);
-        mTexture.reset();
-    }
 }

@@ -15,7 +15,6 @@ package fr.ravenfeld.livewallpaper.library.objects.simple;
 import fr.ravenfeld.livewallpaper.library.objects.animation.SwitchTextureAnimation;
 import rajawali.animation.Animation3D;
 import rajawali.materials.Material;
-import rajawali.materials.textures.ATexture;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;

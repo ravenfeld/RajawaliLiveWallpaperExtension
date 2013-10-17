@@ -19,7 +19,6 @@ import rajawali.primitives.Plane;
 import android.graphics.Bitmap;
 
 public class BackgroundFixed extends AImage {
-	protected Texture mTexture;
 
 	public BackgroundFixed(String nameTexture, int resourceId)
 			throws TextureException {
@@ -63,24 +62,6 @@ public class BackgroundFixed extends AImage {
 		mTexture.setResourceId(resourceId);
 	}
 
-	public void setTexture(Bitmap bitmap) {
-		mTexture.setBitmap(bitmap);
-	}
-
-	public Texture getTexture() {
-		return mTexture;
-	}
-
-	@Override
-	public int getWidth() {
-		return mTexture.getWidth();
-	}
-
-	@Override
-	public int getHeight() {
-		return mTexture.getHeight();
-	}
-
 	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
@@ -89,10 +70,4 @@ public class BackgroundFixed extends AImage {
 		mPlane.setScaleX(scale);
 		mPlane.setScaleY(1);
 	}
-
-    @Override
-    public void surfaceDestroyed() throws TextureException {
-        mMaterial.removeTexture(mTexture);
-        mTexture.reset();
-    }
 }

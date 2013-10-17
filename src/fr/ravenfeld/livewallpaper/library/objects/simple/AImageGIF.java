@@ -1,26 +1,37 @@
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
-import android.graphics.Bitmap;
-
 import rajawali.materials.Material;
 import rajawali.materials.textures.ASingleTexture;
 import rajawali.materials.textures.ATexture;
+import rajawali.materials.textures.AnimatedGIFTexture;
 import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;
 
-public abstract class AImage extends AElement{
-    protected Texture mTexture;
+public abstract class AImageGIF  extends  AElement{
+    protected AnimatedGIFTexture mTexture;
 
-    public  Texture getTexture(){
+    public AnimatedGIFTexture getTexture(){
         return mTexture;
     }
 
-    public void setTexture(int resourceId) {
-        mTexture.setResourceId(resourceId);
+    public void setLoop(boolean loop) {
+        mTexture.setLoop(loop);
     }
 
-    public void setTexture(Bitmap bitmap) {
-        mTexture.setBitmap(bitmap);
+    public void rewind() {
+        mTexture.rewind();
+    }
+
+    public void animate() {
+        mTexture.animate();
+    }
+
+    public void stopAnimation() {
+        mTexture.stopAnimation();
+    }
+
+    public void update() throws ATexture.TextureException {
+        mTexture.update();
     }
 
     @Override

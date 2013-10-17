@@ -22,7 +22,6 @@ import rajawali.math.vector.Vector2;
 import rajawali.primitives.Plane;
 
 public class Image extends AImage {
-	protected Texture mTexture;
     protected float mSize;
 
 	public Image(String nameTexture, int resourceId, float size)
@@ -64,28 +63,6 @@ public class Image extends AImage {
 		mPlane = other.getObject3D();
 	}
 
-	public void setTexture(int resourceId) {
-		mTexture.setResourceId(resourceId);
-	}
-
-	public void setTexture(Bitmap bitmap) {
-		mTexture.setBitmap(bitmap);
-	}
-
-	public Texture getTexture() {
-		return mTexture;
-	}
-
-	@Override
-	public int getWidth() {
-		return mTexture.getWidth();
-	}
-
-	@Override
-	public int getHeight() {
-		return mTexture.getHeight();
-	}
-
     public float getSize() {
         return mSize;
     }
@@ -106,10 +83,4 @@ public class Image extends AImage {
 		mPlane.setScaleX(scale);
 		mPlane.setScaleY(mSize);
 	}
-
-    @Override
-    public void surfaceDestroyed() throws TextureException {
-        mMaterial.removeTexture(mTexture);
-        mTexture.reset();
-    }
 }
