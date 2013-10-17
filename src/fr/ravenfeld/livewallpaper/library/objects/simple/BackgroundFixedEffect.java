@@ -15,6 +15,7 @@ package fr.ravenfeld.livewallpaper.library.objects.simple;
 import fr.ravenfeld.livewallpaper.library.objects.animation.SwitchTextureAnimation;
 import rajawali.animation.Animation3D;
 import rajawali.materials.Material;
+import rajawali.materials.textures.ATexture;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;
@@ -116,20 +117,14 @@ public class BackgroundFixedEffect extends AImage {
 		mPlane.setScaleY(1);
 	}
 
-/*	public void update(float pas) {
-		if (mTexture1.getInfluence() < 0.0f) {
-			mSens = true;
-		} else if (mTexture1.getInfluence() > 1.0f) {
-			mSens = false;
-		}
-		if (mSens) {
-			mTexture1.setInfluence(mTexture1.getInfluence() + pas);
-			mTexture2.setInfluence(mTexture2.getInfluence() - pas);
-		} else {
-			mTexture1.setInfluence(mTexture1.getInfluence() - pas);
-			mTexture2.setInfluence(mTexture2.getInfluence() + pas);
-		}
-	}*/
+    @Override
+    public void surfaceDestroyed() throws TextureException {
+        mMaterial.removeTexture(mTexture1);
+        mMaterial.removeTexture(mTexture2);
+        mTexture1.reset();
+        mTexture2.reset();
+    }
+
     public SwitchTextureAnimation getAnimation(){
         return mSwitchTextureAnimation;
     }

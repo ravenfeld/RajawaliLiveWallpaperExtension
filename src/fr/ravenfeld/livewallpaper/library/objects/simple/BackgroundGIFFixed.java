@@ -13,6 +13,7 @@
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
 import rajawali.materials.Material;
+import rajawali.materials.textures.ATexture;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.AnimatedGIFTexture;
 import rajawali.primitives.Plane;
@@ -105,4 +106,10 @@ public class BackgroundGIFFixed extends AImage {
 		mPlane.setScaleX(size);
 		mPlane.setScaleY(1);
 	}
+
+    @Override
+    public void surfaceDestroyed() throws TextureException {
+        mMaterial.removeTexture(mTexture);
+        mTexture.reset();
+    }
 }

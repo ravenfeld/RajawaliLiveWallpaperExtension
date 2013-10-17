@@ -89,4 +89,10 @@ public class BackgroundFixed extends AImage {
 		mPlane.setScaleX(scale);
 		mPlane.setScaleY(1);
 	}
+
+    @Override
+    public void surfaceDestroyed() throws TextureException {
+        mMaterial.removeTexture(mTexture);
+        mTexture.reset();
+    }
 }

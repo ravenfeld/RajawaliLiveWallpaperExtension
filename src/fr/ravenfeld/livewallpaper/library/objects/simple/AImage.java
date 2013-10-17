@@ -1,7 +1,7 @@
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
 import rajawali.materials.Material;
-import rajawali.materials.textures.ASingleTexture;
+import rajawali.materials.textures.ATexture;
 import rajawali.primitives.Plane;
 
 public abstract class AImage {
@@ -32,6 +32,7 @@ public abstract class AImage {
 	}
 	public abstract void surfaceChanged(int width, int height);
 
+    public abstract void surfaceDestroyed() throws ATexture.TextureException;
 
 
 }

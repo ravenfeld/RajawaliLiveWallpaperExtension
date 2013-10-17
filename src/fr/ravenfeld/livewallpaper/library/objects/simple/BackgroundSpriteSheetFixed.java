@@ -14,6 +14,7 @@ package fr.ravenfeld.livewallpaper.library.objects.simple;
 
 import rajawali.materials.Material;
 import rajawali.materials.plugins.SpriteSheetMaterialPlugin;
+import rajawali.materials.textures.ATexture;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;
@@ -159,4 +160,10 @@ public class BackgroundSpriteSheetFixed extends AImage {
 		mPlane.setScaleX(scale);
 		mPlane.setScaleY(1);
 	}
+
+    @Override
+    public void surfaceDestroyed() throws TextureException {
+        mMaterial.removeTexture(mTexture);
+        mTexture.reset();
+    }
 }
