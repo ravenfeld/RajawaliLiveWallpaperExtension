@@ -12,12 +12,6 @@
  */
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
-import rajawali.materials.Material;
-import rajawali.materials.textures.ATexture.TextureException;
-import rajawali.materials.textures.AnimatedGIFTexture;
-import rajawali.materials.textures.Texture;
-import rajawali.primitives.Plane;
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -27,20 +21,28 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+
+import rajawali.materials.Material;
+import rajawali.materials.textures.ATexture.TextureException;
+import rajawali.materials.textures.Texture;
+import rajawali.primitives.Plane;
 
 public class Text {
     protected Texture mTexture;
     protected Material mMaterial;
     protected Plane mPlane;
     protected TextView mText;
-    private final Bitmap mBitmap;
-    private final Canvas mCanvas;
-    private final LinearLayout mWidgetGroup;
+    private Bitmap mBitmap;
+    private Canvas mCanvas;
+    private final FrameLayout mWidgetGroup;
     private final Context mContext;
 
     public Text(Context context, String text) {
@@ -49,11 +51,13 @@ public class Text {
 
     public Text(Context context, String text, int textSize) {
         mContext = context;
-        mWidgetGroup = new LinearLayout(mContext);
+        mWidgetGroup = new FrameLayout(mContext);
         mWidgetGroup.setBackgroundColor(Color.TRANSPARENT);
-        mWidgetGroup.setLayoutParams(new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        FrameLayout.LayoutParams params =new FrameLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                params.gravity=Gravity.CENTER;
 
+        mWidgetGroup.setLayoutParams(params);
         mText = new TextView(mContext);
         mPlane = new Plane(1f, 1f, 1, 1);
         mPlane.setColor(Color.TRANSPARENT);
@@ -64,29 +68,11 @@ public class Text {
         mMaterial.setColorInfluence(0);
         mText.setText(text);
         mText.setTextSize(textSize);
+        mText.setGravity(Gravity.CENTER);
         mWidgetGroup.addView(mText);
+        mWidgetGroup.setBackgroundColor(Color.RED);
 
-        int sizeWidth = Math
-                .round((nbMaxCharacterLine() * mText.getTextSize() / 1.80f));
-
-
-        int sizeHeight = Math.round(mText.getTextSize() * 1.25f * nbLines());
-
-        Display display = ((WindowManager) context
-                .getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-
-        mWidgetGroup.layout(0, 0, size.x, size.y);
-        mText.layout(0, 0, sizeWidth, sizeHeight);
-
-
-        mBitmap = Bitmap.createBitmap(mWidgetGroup.getWidth(),
-                mWidgetGroup.getHeight(), Bitmap.Config.ARGB_8888);
-
-        mCanvas = new Canvas(mBitmap);
-        mWidgetGroup.draw(mCanvas);
+        draw();
 
         mTexture = new Texture("text", mBitmap);
 
@@ -97,7 +83,7 @@ public class Text {
             e.printStackTrace();
         }
         mPlane.setMaterial(mMaterial);
-    }
+       }
 
     public void setBackgroundColor(int color) {
         mText.setBackgroundColor(color);
@@ -122,6 +108,15 @@ public class Text {
     public void setTextColor(ColorStateList colors) {
         mText.setTextColor(colors);
         draw();
+    }
+
+    public void setText(String text) {
+        mText.setText(text);
+        draw();
+    }
+
+    public String getText() {
+        return mText.getText().toString();
     }
 
     public void setFont(String font) {
@@ -158,12 +153,12 @@ public class Text {
         String[] split = text.split("\n");
         int nbMax = 0;
         if (split.length == 0) {
-            nbMax = text.length() + 1;
+            nbMax = text.length()+1 ;
         } else {
             for (int i = 0; i < split.length; i++) {
                 int length = split[i].length();
                 if (length > nbMax) {
-                    nbMax = length + 1;
+                    nbMax = length+1 ;
                 }
             }
         }
@@ -172,6 +167,70 @@ public class Text {
     }
 
     private void draw() {
+        Log.e("TEST","DRAW");
+
+
+        Display display = ((WindowManager) mContext
+                .getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        int sizeWidth = Math
+                .round((nbMaxCharacterLine() * mText.getTextSize() / 1.8f));
+int count=0;
+        while(sizeWidth > size.x && count<5){
+
+            String text = mText.getText().toString();
+            String[] split = text.split("\n");
+            int nbCharMax =(int)( size.x/(mText.getTextSize() / 1.8f))-1;
+            if (split.length == 0) {
+
+                String sub=text.substring(0,nbCharMax);
+                String sub1=text.substring(nbCharMax);
+                mText.setText(sub+"\n"+sub1);
+            } else {
+                text="";
+                for (int i = 0; i < split.length; i++) {
+                    String string = split[i];
+                    if(string.length()>nbCharMax){
+                        String sub=string.substring(0,nbCharMax);
+                        String sub1=string.substring(nbCharMax);
+                        split[i]=sub+"\n"+sub1;
+                    }
+                    if(text.equalsIgnoreCase("")){
+                     text=split[i];
+                    }else{
+                    text=text+"\n"+split[i];
+                    }
+                }
+                mText.setText(text);
+            }
+            Log.e("TEST","TEST phrase "+mText.getText());
+
+
+             sizeWidth = Math
+                    .round((nbMaxCharacterLine() * mText.getTextSize() / 1.8f));
+            Log.e("TEST","nbLine "+nbLines()+ " count "+count+ " sizeWidth "+sizeWidth+ " x "+size.x);
+            count++;
+        }
+
+
+
+
+        int sizeHeight = Math.round(mText.getTextSize() * 1.25f * nbLines());
+
+
+        mWidgetGroup.layout(0, 0, size.x, size.y);
+        int posX =(int)(size.x/2f-sizeWidth/2f);
+        int posY = (int)(size.y/2f-sizeHeight/2f);
+        mText.layout(posX, posY, posX+sizeWidth, posY+sizeHeight);
+        if (mBitmap == null) {
+            mBitmap = Bitmap.createBitmap(mWidgetGroup.getWidth(),
+                    mWidgetGroup.getHeight(), Bitmap.Config.ARGB_8888);
+        }
+        if (mCanvas == null) {
+            mCanvas = new Canvas(mBitmap);
+        }
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         mWidgetGroup.draw(mCanvas);
     }
