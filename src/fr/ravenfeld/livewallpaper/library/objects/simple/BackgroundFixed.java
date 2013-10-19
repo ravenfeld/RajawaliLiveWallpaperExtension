@@ -58,10 +58,6 @@ public class BackgroundFixed extends AImage {
 		mPlane = other.getObject3D();
 	}
 
-	public void setTexture(int resourceId) {
-		mTexture.setResourceId(resourceId);
-	}
-
 	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;
