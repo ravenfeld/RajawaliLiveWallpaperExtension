@@ -17,11 +17,14 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -44,7 +47,6 @@ public class Text {
     private Canvas mCanvas;
     private final FrameLayout mWidgetGroup;
     private final Context mContext;
-
     public Text(Context context, String text) {
         this(context, text, 14);
     }
@@ -83,7 +85,7 @@ public class Text {
             e.printStackTrace();
         }
         mPlane.setMaterial(mMaterial);
-       }
+    }
 
     public void setBackgroundColor(int color) {
         mText.setBackgroundColor(color);
@@ -112,6 +114,15 @@ public class Text {
 
     public void setText(String text) {
         mText.setText(text);
+        draw();
+    }
+
+    public float getTextSize(){
+        return mText.getTextSize();
+    }
+
+    public void setTextSize(float textSize){
+        mText.setTextSize( textSize);
         draw();
     }
 
@@ -152,74 +163,109 @@ public class Text {
         String text = mText.getText().toString();
         String[] split = text.split("\n");
         int nbMax = 0;
-        if (split.length == 0) {
-            nbMax = text.length()+1 ;
-        } else {
+
             for (int i = 0; i < split.length; i++) {
                 int length = split[i].length();
                 if (length > nbMax) {
                     nbMax = length+1 ;
                 }
             }
-        }
+
 
         return nbMax;
     }
 
-    private void draw() {
-        Log.e("TEST","DRAW");
+    private int getLineHeight(){
+        Rect bounds = new Rect();
+        Paint textPaint = mText.getPaint();
+        textPaint.getTextBounds(mText.getText().toString(),0,mText.getText().length(),bounds);
+        return bounds.height();
+    }
+    private int getLineWidth(){
+        Rect bounds = new Rect();
+        Paint textPaint = mText.getPaint();
 
+        String text = mText.getText().toString();
+        String[] split = text.split("\n");
+        int widthMax = 0;
+
+            for (int i = 0; i < split.length; i++) {
+                textPaint.getTextBounds(split[i],0,split[i].length(),bounds);
+                int width = bounds.width();
+                if (width > widthMax) {
+                    widthMax =width ;
+                }
+            }
+
+
+        return widthMax;
+    }
+    private int getCharWidth(){
+        Rect bounds = new Rect();
+        Paint textPaint = mText.getPaint();
+
+
+            textPaint.getTextBounds("1",0,"1".length(),bounds);
+           return bounds.width();
+
+    }
+    private void draw() {
+
+        Rect bounds = new Rect();
+        Paint textPaint = mText.getPaint();
+        textPaint.getTextBounds(mText.getText().toString(),0,mText.getText().length(),bounds);
+        int height = bounds.height();
+        int width = bounds.width();
+
+        Log.e("TEST","DRAW  height "+height+" width "+width);
 
         Display display = ((WindowManager) mContext
                 .getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
 
-        int sizeWidth = Math
-                .round((nbMaxCharacterLine() * mText.getTextSize() / 1.8f));
+        //int sizeWidth = Math.round((nbMaxCharacterLine() * getSizeByChar()));
+        int sizeWidth=getLineWidth();
 int count=0;
-        while(sizeWidth > size.x && count<5){
+        while(sizeWidth > size.x && count<5 ){
 
             String text = mText.getText().toString();
             String[] split = text.split("\n");
-            int nbCharMax =(int)( size.x/(mText.getTextSize() / 1.8f))-1;
-            if (split.length == 0) {
+            //String str = getText();
+            //char[] chars = str.toCharArray();
+            Paint p = mText.getPaint();
 
-                String sub=text.substring(0,nbCharMax);
-                String sub1=text.substring(nbCharMax);
-                mText.setText(sub+"\n"+sub1);
-            } else {
+
+
                 text="";
+                Log.e("TEST","CACA "+split.length);
+
                 for (int i = 0; i < split.length; i++) {
                     String string = split[i];
-                    if(string.length()>nbCharMax){
-                        String sub=string.substring(0,nbCharMax);
-                        String sub1=string.substring(nbCharMax);
-                        split[i]=sub+"\n"+sub1;
+                    int nextPos = p.breakText(string,false, size.x, null);
+                    if(nextPos<string.length()){
+                        Log.e("TEST","nextPos "+nextPos+" char "+ string.charAt(nextPos));
+
+                        string = string.substring(0, nextPos) + "\n" + string.substring(nextPos, string.length());
                     }
                     if(text.equalsIgnoreCase("")){
-                     text=split[i];
+                     text=string;
                     }else{
-                    text=text+"\n"+split[i];
+                    text=text+"\n"+string;
                     }
                 }
                 mText.setText(text);
-            }
-            Log.e("TEST","TEST phrase "+mText.getText());
 
 
-             sizeWidth = Math
-                    .round((nbMaxCharacterLine() * mText.getTextSize() / 1.8f));
+
+             sizeWidth = getLineWidth();
             Log.e("TEST","nbLine "+nbLines()+ " count "+count+ " sizeWidth "+sizeWidth+ " x "+size.x);
+            Log.e("TEST","texte "+mText.getText());
             count++;
         }
-
-
-
-
-        int sizeHeight = Math.round(mText.getTextSize() * 1.25f * nbLines());
-
-
+        //int sizeHeight = Math.round(getSizeByChar() * 2.25f * nbLines());
+int sizeHeight =Math.round(getLineHeight()*2.0f* nbLines());
+        mWidgetGroup.measure(size.x, size.y);
         mWidgetGroup.layout(0, 0, size.x, size.y);
         int posX =(int)(size.x/2f-sizeWidth/2f);
         int posY = (int)(size.y/2f-sizeHeight/2f);
@@ -231,7 +277,6 @@ int count=0;
         if (mCanvas == null) {
             mCanvas = new Canvas(mBitmap);
         }
-        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         mWidgetGroup.draw(mCanvas);
     }
 
