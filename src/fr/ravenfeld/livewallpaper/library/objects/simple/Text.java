@@ -24,12 +24,10 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -38,7 +36,7 @@ import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;
 
-public class Text {
+public class Text extends AElement {
     protected Texture mTexture;
     protected Material mMaterial;
     protected Plane mPlane;
@@ -47,17 +45,24 @@ public class Text {
     private Canvas mCanvas;
     private final FrameLayout mWidgetGroup;
     private final Context mContext;
+    private int mWidth;
+    private int mHeight;
+
     public Text(Context context, String text) {
         this(context, text, 14);
     }
 
     public Text(Context context, String text, int textSize) {
+        this(context, text, textSize, getDisplayWidth(context), getDisplayHeight(context));
+    }
+
+    public Text(Context context, String text, int textSize, int width, int height) {
         mContext = context;
         mWidgetGroup = new FrameLayout(mContext);
         mWidgetGroup.setBackgroundColor(Color.TRANSPARENT);
-        FrameLayout.LayoutParams params =new FrameLayout.LayoutParams(
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-                params.gravity=Gravity.CENTER;
+        params.gravity = Gravity.CENTER;
 
         mWidgetGroup.setLayoutParams(params);
         mText = new TextView(mContext);
@@ -66,13 +71,18 @@ public class Text {
         mPlane.setTransparent(true);
         mPlane.setRotY(180);
 
+        mWidth = width;
+        mHeight = height;
+
         mMaterial = new Material();
         mMaterial.setColorInfluence(0);
+
         mText.setText(text);
         mText.setTextSize(textSize);
         mText.setGravity(Gravity.CENTER);
+
         mWidgetGroup.addView(mText);
-        mWidgetGroup.setBackgroundColor(Color.RED);
+        mWidgetGroup.setBackgroundColor(Color.TRANSPARENT);
 
         draw();
 
@@ -85,6 +95,23 @@ public class Text {
             e.printStackTrace();
         }
         mPlane.setMaterial(mMaterial);
+    }
+
+
+    private static int getDisplayWidth(Context context) {
+        Display display = ((WindowManager) context
+                .getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size.x;
+    }
+
+    private static int getDisplayHeight(Context context) {
+        Display display = ((WindowManager) context
+                .getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size.y;
     }
 
     public void setBackgroundColor(int color) {
@@ -117,12 +144,12 @@ public class Text {
         draw();
     }
 
-    public float getTextSize(){
+    public float getTextSize() {
         return mText.getTextSize();
     }
 
-    public void setTextSize(float textSize){
-        mText.setTextSize( textSize);
+    public void setTextSize(float textSize) {
+        mText.setTextSize(textSize);
         draw();
     }
 
@@ -141,8 +168,27 @@ public class Text {
         return mPlane;
     }
 
+    @Override
+    public int getWidth() {
+        return mWidth;
+    }
+
+    @Override
+    public int getHeight() {
+        return mHeight;
+    }
+
+    public void getHeight(int height) {
+        mHeight = height;
+    }
+
+    public void getWidth(int width) {
+        mWidth = width;
+    }
+
     public void surfaceChanged(int width, int height) {
-        // TODO rotation pour le text
+        mPlane.setScaleX((float) mWidth / (float) width);
+        mPlane.setScaleY((float) mHeight / (float) height);
     }
 
     public void setPosition(double x, double y, double z) {
@@ -159,117 +205,55 @@ public class Text {
         return split.length;
     }
 
-    private int nbMaxCharacterLine() {
-        String text = mText.getText().toString();
-        String[] split = text.split("\n");
-        int nbMax = 0;
-
-            for (int i = 0; i < split.length; i++) {
-                int length = split[i].length();
-                if (length > nbMax) {
-                    nbMax = length+1 ;
-                }
-            }
-
-
-        return nbMax;
-    }
-
-    private int getLineHeight(){
+    private int getLineWidth() {
         Rect bounds = new Rect();
         Paint textPaint = mText.getPaint();
-        textPaint.getTextBounds(mText.getText().toString(),0,mText.getText().length(),bounds);
-        return bounds.height();
-    }
-    private int getLineWidth(){
-        Rect bounds = new Rect();
-        Paint textPaint = mText.getPaint();
-
         String text = mText.getText().toString();
         String[] split = text.split("\n");
         int widthMax = 0;
 
-            for (int i = 0; i < split.length; i++) {
-                textPaint.getTextBounds(split[i],0,split[i].length(),bounds);
-                int width = bounds.width();
-                if (width > widthMax) {
-                    widthMax =width ;
-                }
+        for (int i = 0; i < split.length; i++) {
+            textPaint.getTextBounds(split[i], 0, split[i].length(), bounds);
+            int width = bounds.width();
+            if (width > widthMax) {
+                widthMax = width;
             }
-
-
+        }
         return widthMax;
     }
-    private int getCharWidth(){
-        Rect bounds = new Rect();
-        Paint textPaint = mText.getPaint();
 
-
-            textPaint.getTextBounds("1",0,"1".length(),bounds);
-           return bounds.width();
-
-    }
     private void draw() {
-
-        Rect bounds = new Rect();
-        Paint textPaint = mText.getPaint();
-        textPaint.getTextBounds(mText.getText().toString(),0,mText.getText().length(),bounds);
-        int height = bounds.height();
-        int width = bounds.width();
-
-        Log.e("TEST","DRAW  height "+height+" width "+width);
-
-        Display display = ((WindowManager) mContext
-                .getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-        //int sizeWidth = Math.round((nbMaxCharacterLine() * getSizeByChar()));
-        int sizeWidth=getLineWidth();
-int count=0;
-        while(sizeWidth > size.x && count<5 ){
+        int lineWidth = getLineWidth();
+        while (lineWidth > mWidth) {
 
             String text = mText.getText().toString();
             String[] split = text.split("\n");
-            //String str = getText();
-            //char[] chars = str.toCharArray();
             Paint p = mText.getPaint();
-
-
-
-                text="";
-                Log.e("TEST","CACA "+split.length);
-
-                for (int i = 0; i < split.length; i++) {
-                    String string = split[i];
-                    int nextPos = p.breakText(string,false, size.x, null);
-                    if(nextPos<string.length()){
-                        Log.e("TEST","nextPos "+nextPos+" char "+ string.charAt(nextPos));
-
-                        string = string.substring(0, nextPos) + "\n" + string.substring(nextPos, string.length());
-                    }
-                    if(text.equalsIgnoreCase("")){
-                     text=string;
-                    }else{
-                    text=text+"\n"+string;
-                    }
+            text = "";
+            for (int i = 0; i < split.length; i++) {
+                String string = split[i];
+                int nextPos = p.breakText(string, false, mWidth, null);
+                if (nextPos < string.length()) {
+                    string = string.substring(0, nextPos) + "\n" + string.substring(nextPos, string.length());
                 }
-                mText.setText(text);
-
-
-
-             sizeWidth = getLineWidth();
-            Log.e("TEST","nbLine "+nbLines()+ " count "+count+ " sizeWidth "+sizeWidth+ " x "+size.x);
-            Log.e("TEST","texte "+mText.getText());
-            count++;
+                if (text.equalsIgnoreCase("")) {
+                    text = string;
+                } else {
+                    text = text + "\n" + string;
+                }
+            }
+            mText.setText(text);
+            lineWidth = getLineWidth();
         }
-        //int sizeHeight = Math.round(getSizeByChar() * 2.25f * nbLines());
-int sizeHeight =Math.round(getLineHeight()*2.0f* nbLines());
-        mWidgetGroup.measure(size.x, size.y);
-        mWidgetGroup.layout(0, 0, size.x, size.y);
-        int posX =(int)(size.x/2f-sizeWidth/2f);
-        int posY = (int)(size.y/2f-sizeHeight/2f);
-        mText.layout(posX, posY, posX+sizeWidth, posY+sizeHeight);
+        int lineHeight = Math.round(mText.getLineHeight() * nbLines());
+        if (mText.getLineCount() > 1) {
+            lineWidth = mWidth;
+        }
+        mWidgetGroup.measure(mWidth, mHeight);
+        mWidgetGroup.layout(0, 0, mWidth, mHeight);
+        int posX = (int) (mWidth / 2f - lineWidth / 2f);
+        int posY = (int) (mHeight / 2f - lineHeight / 2f);
+        mText.layout(posX, posY, posX + lineWidth, posY + lineHeight);
         if (mBitmap == null) {
             mBitmap = Bitmap.createBitmap(mWidgetGroup.getWidth(),
                     mWidgetGroup.getHeight(), Bitmap.Config.ARGB_8888);
@@ -277,7 +261,9 @@ int sizeHeight =Math.round(getLineHeight()*2.0f* nbLines());
         if (mCanvas == null) {
             mCanvas = new Canvas(mBitmap);
         }
+        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         mWidgetGroup.draw(mCanvas);
+        surfaceChanged(getDisplayWidth(mContext), getDisplayHeight(mContext));
     }
 
     public Texture getTexture() {
