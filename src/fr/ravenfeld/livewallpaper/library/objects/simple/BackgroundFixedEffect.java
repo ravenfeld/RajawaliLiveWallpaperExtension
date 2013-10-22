@@ -25,6 +25,7 @@ public class BackgroundFixedEffect extends AImage {
 	protected Texture mTexture2;
 	private boolean mSens = true;
     private SwitchTextureAnimation mSwitchTextureAnimation;
+
 	public BackgroundFixedEffect(String nameTexture1, int resourceId1,
 			String nameTexture2, int resourceId2)
 			throws TextureException {

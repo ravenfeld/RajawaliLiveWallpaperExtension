@@ -206,19 +206,19 @@ public class Text extends AElement {
     }
 
     private int getLineWidth() {
-        Rect bounds = new Rect();
         Paint textPaint = mText.getPaint();
         String text = mText.getText().toString();
         String[] split = text.split("\n");
         int widthMax = 0;
 
         for (int i = 0; i < split.length; i++) {
-            textPaint.getTextBounds(split[i], 0, split[i].length(), bounds);
-            int width = bounds.width();
+
+            int width =Math.round(textPaint.measureText(split[i])+0.5f);
             if (width > widthMax) {
                 widthMax = width;
             }
         }
+
         return widthMax;
     }
 

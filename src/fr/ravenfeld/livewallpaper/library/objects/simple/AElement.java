@@ -7,32 +7,42 @@ import rajawali.materials.textures.Texture;
 import rajawali.primitives.Plane;
 
 public abstract class AElement {
-	protected Material mMaterial;
-	protected Plane mPlane;
-	public Material getMaterial() {
-		return mMaterial;
-	}
+    protected Material mMaterial;
+    protected Plane mPlane;
 
-	public Plane getObject3D() {
-		return mPlane;
-	}
+    public Material getMaterial() {
+        return mMaterial;
+    }
 
-	public abstract int getWidth();
+    public Plane getObject3D() {
+        return mPlane;
+    }
 
-	public abstract int getHeight();
+    public abstract int getWidth();
 
-	public void setTransparent(boolean transparent) {
-		mPlane.setTransparent(transparent);
-	}
+    public abstract int getHeight();
 
-	public void setVisible(boolean visible) {
-		mPlane.setVisible(visible);
-	}
+    public void setTransparent(boolean transparent) {
+        mPlane.setTransparent(transparent);
+    }
 
-	public boolean isVisible() {
-		return mPlane.isVisible();
-	}
-	public abstract void surfaceChanged(int width, int height);
+    public void setVisible(boolean visible) {
+        mPlane.setVisible(visible);
+    }
+
+    public boolean isVisible() {
+        return mPlane.isVisible();
+    }
+
+    public void setPosition(double x, double y, double z) {
+        mPlane.setPosition(x, y, z);
+    }
+
+    public void setZ(double z) {
+        mPlane.setZ(z);
+    }
+
+    public abstract void surfaceChanged(int width, int height);
 
     public abstract void surfaceDestroyed() throws ATexture.TextureException;
 

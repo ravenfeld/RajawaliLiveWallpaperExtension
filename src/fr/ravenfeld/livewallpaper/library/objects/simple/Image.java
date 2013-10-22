@@ -68,7 +68,7 @@ public class Image extends AImage {
     }
 
     public void setPosition(double x, double y){
-        mPlane.setPosition(x,y,0);
+        mPlane.setPosition(x,y,mPlane.getZ());
     }
 
     public Vector2 getPosition(){
