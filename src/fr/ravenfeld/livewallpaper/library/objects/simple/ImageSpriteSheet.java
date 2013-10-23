@@ -106,10 +106,6 @@ public class ImageSpriteSheet extends AImage {
         mPlane.setPosition(x,y,0);
     }
 
-    public Vector2 getPosition(){
-        return new Vector2(mPlane.getPosition().x, mPlane.getPosition().y);
-    }
-
 	public int getWidthTile() {
 		return mTexture.getWidth() / mNumTilesX;
 	}

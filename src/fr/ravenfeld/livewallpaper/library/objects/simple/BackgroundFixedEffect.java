@@ -125,7 +125,7 @@ public class BackgroundFixedEffect extends AImage {
         mTexture2.reset();
     }
 
-    public SwitchTextureAnimation getAnimation(){
+    public SwitchTextureAnimation getSwitchTextureAnimation(){
         return mSwitchTextureAnimation;
     }
 

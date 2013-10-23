@@ -20,7 +20,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -38,8 +37,6 @@ import rajawali.primitives.Plane;
 
 public class Text extends AElement {
     protected Texture mTexture;
-    protected Material mMaterial;
-    protected Plane mPlane;
     protected TextView mText;
     private Bitmap mBitmap;
     private Canvas mCanvas;
@@ -47,22 +44,28 @@ public class Text extends AElement {
     private final Context mContext;
     private int mWidth;
     private int mHeight;
-
+    private int mLayoutGravity;
+    private boolean mUseWidthLayout;
     public Text(Context context, String text) {
         this(context, text, 14);
     }
 
     public Text(Context context, String text, int textSize) {
-        this(context, text, textSize, getDisplayWidth(context), getDisplayHeight(context));
+        this(context, text, textSize, Gravity.CENTER,  Gravity.CENTER);
     }
 
-    public Text(Context context, String text, int textSize, int width, int height) {
+
+    public Text(Context context, String text, int textSize, int layoutGravity, int textGravity) {
+        this(context, text, textSize, getDisplayWidth(context), getDisplayHeight(context), layoutGravity, textGravity);
+    }
+
+    public Text(Context context, String text, int textSize, int width, int height, int layoutGravity, int textGravity) {
         mContext = context;
         mWidgetGroup = new FrameLayout(mContext);
         mWidgetGroup.setBackgroundColor(Color.TRANSPARENT);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        params.gravity = Gravity.CENTER;
+        mLayoutGravity = layoutGravity;
 
         mWidgetGroup.setLayoutParams(params);
         mText = new TextView(mContext);
@@ -79,11 +82,11 @@ public class Text extends AElement {
 
         mText.setText(text);
         mText.setTextSize(textSize);
-        mText.setGravity(Gravity.CENTER);
+        mText.setGravity(textGravity);
 
         mWidgetGroup.addView(mText);
         mWidgetGroup.setBackgroundColor(Color.TRANSPARENT);
-
+        mUseWidthLayout =false;
         draw();
 
         mTexture = new Texture("text", mBitmap);
@@ -164,6 +167,14 @@ public class Text extends AElement {
         draw();
     }
 
+    public void setUseWidthLayout(boolean use){
+        mUseWidthLayout =use;
+        draw();
+    }
+
+    public boolean getUseWidthLayout(){
+        return mUseWidthLayout;
+    }
     public Plane getObject3D() {
         return mPlane;
     }
@@ -191,6 +202,10 @@ public class Text extends AElement {
         mPlane.setScaleY((float) mHeight / (float) height);
     }
 
+    public void setPosition(double x, double y) {
+        mPlane.setPosition(x, y, mPlane.getZ());
+    }
+
     public void setPosition(double x, double y, double z) {
         mPlane.setPosition(x, y, z);
     }
@@ -213,7 +228,7 @@ public class Text extends AElement {
 
         for (int i = 0; i < split.length; i++) {
 
-            int width =Math.round(textPaint.measureText(split[i])+0.5f);
+            int width = Math.round(textPaint.measureText(split[i]));
             if (width > widthMax) {
                 widthMax = width;
             }
@@ -251,9 +266,25 @@ public class Text extends AElement {
         }
         mWidgetGroup.measure(mWidth, mHeight);
         mWidgetGroup.layout(0, 0, mWidth, mHeight);
-        int posX = (int) (mWidth / 2f - lineWidth / 2f);
-        int posY = (int) (mHeight / 2f - lineHeight / 2f);
+
+        if(mUseWidthLayout){
+            lineWidth=mWidth;
+        }
+
+        int posX =0;
+        int posY = 0;
+        switch (mLayoutGravity){
+            case Gravity.TOP:
+                posX =0;
+                posY = 0;
+                break;
+            case Gravity.CENTER:
+                 posX = (int) (mWidth / 2f - lineWidth / 2f);
+                 posY = (int) (mHeight / 2f - lineHeight / 2f);
+                break;
+        }
         mText.layout(posX, posY, posX + lineWidth, posY + lineHeight);
+
         if (mBitmap == null) {
             mBitmap = Bitmap.createBitmap(mWidgetGroup.getWidth(),
                     mWidgetGroup.getHeight(), Bitmap.Config.ARGB_8888);

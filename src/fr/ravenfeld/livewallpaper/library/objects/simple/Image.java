@@ -67,14 +67,6 @@ public class Image extends AImage {
         return mSize;
     }
 
-    public void setPosition(double x, double y){
-        mPlane.setPosition(x,y,mPlane.getZ());
-    }
-
-    public Vector2 getPosition(){
-       return new Vector2(mPlane.getPosition().x, mPlane.getPosition().y);
-    }
-
 	@Override
 	public void surfaceChanged(int width, int height) {
 		float ratioDisplay = (float) height / (float) width;

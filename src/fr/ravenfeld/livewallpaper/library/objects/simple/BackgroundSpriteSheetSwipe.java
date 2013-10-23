@@ -12,14 +12,18 @@
  */
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
+import rajawali.animation.Animation3D;
+import rajawali.animation.TranslateAnimation3D;
 import rajawali.materials.textures.ATexture.TextureException;
 import fr.ravenfeld.livewallpaper.library.objects.interaction.IOffsetsChanged;
 import fr.ravenfeld.livewallpaper.library.objects.interaction.SwipeDirection;
+import rajawali.math.vector.Vector3;
 
 public class BackgroundSpriteSheetSwipe extends BackgroundSpriteSheetFixed
 		implements IOffsetsChanged {
 	private float mWidthSwipe;
 	protected SwipeDirection mSwipeDirection;
+    protected Animation3D mAnimation;
 
 	public BackgroundSpriteSheetSwipe(String nameTexture, int resourceId,
 			int numTilesX, int numTilesY)
@@ -107,14 +111,26 @@ public class BackgroundSpriteSheetSwipe extends BackgroundSpriteSheetFixed
 		}
 	}
 
-	@Override
-	public void offsetsChanged(float xOffset) {
-		if (mSwipeDirection == SwipeDirection.INVERSE) {
-			xOffset = -1.0f * xOffset + 1.0f;
-		}
-		mPlane.setX((1 - mWidthSwipe) * (xOffset - 0.5f));
-	}
+    public Animation3D offsetsChanged(float xOffset) {
+        if (mSwipeDirection == SwipeDirection.INVERSE) {
+            xOffset = -1.0f * xOffset + 1.0f;
+        }
+        if (mAnimation != null) {
+            mAnimation.pause();
+        }
+        mAnimation = new TranslateAnimation3D(new Vector3(mPlane.getPosition()), new Vector3((1 - mWidthSwipe) * (xOffset - 0.5f), mPlane.getY(), mPlane.getZ()));
+        mAnimation.setDuration(50);
+        mAnimation.setRepeatMode(Animation3D.RepeatMode.NONE);
+        mAnimation.setTransformable3D(mPlane);
 
+        mAnimation.play();
+        return mAnimation;
+    }
+
+    @Override
+    public Animation3D getOffsetsAnimation(){
+        return mAnimation;
+    }
 
 	@Override
 	public SwipeDirection getSwipeDirection() {

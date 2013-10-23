@@ -12,9 +12,13 @@
  */
 package fr.ravenfeld.livewallpaper.library.objects.interaction;
 
+import rajawali.animation.Animation3D;
+
 public interface IOffsetsChanged {
 
-	public void offsetsChanged(float xOffset);
+	public Animation3D offsetsChanged(float xOffset);
+
+    public Animation3D getOffsetsAnimation();
 
 	public SwipeDirection getSwipeDirection();
 
