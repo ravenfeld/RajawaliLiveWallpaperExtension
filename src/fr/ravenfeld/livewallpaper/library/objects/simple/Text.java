@@ -237,7 +237,7 @@ public class Text extends AElement {
         return widthMax;
     }
 
-    private void draw() {
+	private void splitLines(){
         int lineWidth = getLineWidth();
         while (lineWidth > mWidth) {
 
@@ -248,8 +248,15 @@ public class Text extends AElement {
             for (int i = 0; i < split.length; i++) {
                 String string = split[i];
                 int nextPos = p.breakText(string, false, mWidth, null);
+
+				
                 if (nextPos < string.length()) {
-                    string = string.substring(0, nextPos) + "\n" + string.substring(nextPos, string.length());
+                    while(string.charAt(nextPos)!=' ' && nextPos>0){
+                        nextPos--;
+                    }
+					String stringLeft = string.substring(0, nextPos);
+					String stringRight= string.substring(nextPos, string.length());
+                    string = stringLeft + "\n" + stringRight.trim();
                 }
                 if (text.equalsIgnoreCase("")) {
                     text = string;
@@ -260,6 +267,11 @@ public class Text extends AElement {
             mText.setText(text);
             lineWidth = getLineWidth();
         }
+	}
+
+    private void draw() {
+		splitLines();
+        int lineWidth = getLineWidth();
         int lineHeight = Math.round(mText.getLineHeight() * nbLines());
         if (mText.getLineCount() > 1) {
             lineWidth = mWidth;
@@ -278,6 +290,18 @@ public class Text extends AElement {
                 posX =0;
                 posY = 0;
                 break;
+			case Gravity.TOP|Gravity.CENTER_HORIZONTAL:
+				posX = (int) (mWidth / 2f - lineWidth / 2f);
+				posY = 0;
+				break;
+			case Gravity.BOTTOM:
+				posX=0;
+				posY=mHeight-lineHeight;
+				break;
+			case Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL:
+					posX = (int) (mWidth / 2f - lineWidth / 2f);
+					posY=mHeight-lineHeight;
+					break;				
             case Gravity.CENTER:
                  posX = (int) (mWidth / 2f - lineWidth / 2f);
                  posY = (int) (mHeight / 2f - lineHeight / 2f);
