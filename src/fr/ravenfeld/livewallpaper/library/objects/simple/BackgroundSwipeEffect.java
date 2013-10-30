@@ -1,11 +1,11 @@
 /**
  * Copyright 2013 Alexis Lecanu
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
@@ -28,50 +28,49 @@ import rajawali.primitives.Plane;
 public class BackgroundSwipeEffect extends BackgroundFixedEffect implements IOffsetsChanged {
     protected float mWidthSwipe;
     protected SwipeDirection mSwipeDirection;
-    protected TranslateAnimation3D mAnimation;
-
-	public BackgroundSwipeEffect(String nameTexture1, int resourceId1,
-                                 String nameTexture2, int resourceId2)
-			throws TextureException {
-        this(nameTexture1, resourceId1, nameTexture2, resourceId2,SwipeDirection.NORMAL);
-	}
 
     public BackgroundSwipeEffect(String nameTexture1, int resourceId1,
-                                 String nameTexture2, int resourceId2,SwipeDirection direction)
+                                 String nameTexture2, int resourceId2)
             throws TextureException {
-        super(nameTexture1,resourceId1,nameTexture2,resourceId2);
+        this(nameTexture1, resourceId1, nameTexture2, resourceId2, SwipeDirection.NORMAL);
+    }
+
+    public BackgroundSwipeEffect(String nameTexture1, int resourceId1,
+                                 String nameTexture2, int resourceId2, SwipeDirection direction)
+            throws TextureException {
+        super(nameTexture1, resourceId1, nameTexture2, resourceId2);
         setSwipeDirection(direction);
     }
 
-
-	public BackgroundSwipeEffect(String nameTexture1, Bitmap bitmap1,
-                                 String nameTexture2, Bitmap bitmap2)
-			throws TextureException {
-this(nameTexture1, bitmap1, nameTexture2, bitmap2,SwipeDirection.NORMAL);
-	}
 
     public BackgroundSwipeEffect(String nameTexture1, Bitmap bitmap1,
-                                 String nameTexture2, Bitmap bitmap2,SwipeDirection direction)
+                                 String nameTexture2, Bitmap bitmap2)
             throws TextureException {
-        super(nameTexture1,bitmap1,nameTexture2,bitmap2);
+        this(nameTexture1, bitmap1, nameTexture2, bitmap2, SwipeDirection.NORMAL);
+    }
+
+    public BackgroundSwipeEffect(String nameTexture1, Bitmap bitmap1,
+                                 String nameTexture2, Bitmap bitmap2, SwipeDirection direction)
+            throws TextureException {
+        super(nameTexture1, bitmap1, nameTexture2, bitmap2);
         setSwipeDirection(direction);
     }
 
-	public BackgroundSwipeEffect(BackgroundSwipeEffect other) {
+    public BackgroundSwipeEffect(BackgroundSwipeEffect other) {
         super(other);
-		setFrom(other);
-	}
+        setFrom(other);
+    }
 
-	@Override
-	public BackgroundSwipeEffect clone() {
-		return new BackgroundSwipeEffect(this);
-	}
+    @Override
+    public BackgroundSwipeEffect clone() {
+        return new BackgroundSwipeEffect(this);
+    }
 
-	public void setFrom(BackgroundSwipeEffect other) {
+    public void setFrom(BackgroundSwipeEffect other) {
         super.setFrom(other);
         mWidthSwipe = getWidthSwipe();
         mSwipeDirection = getSwipeDirection();
-	}
+    }
 
     @Override
     public void surfaceChanged(int width, int height) {
@@ -89,24 +88,12 @@ this(nameTexture1, bitmap1, nameTexture2, bitmap2,SwipeDirection.NORMAL);
     }
 
 
-    public Animation3D offsetsChanged(float xOffset) {
+    public void offsetsChanged(float xOffset) {
         if (mSwipeDirection == SwipeDirection.INVERSE) {
             xOffset = -1.0f * xOffset + 1.0f;
         }
-        if (mAnimation != null) {
-            mAnimation.pause();
-        }
-        mAnimation = new TranslateAnimation3D(new Vector3(mPlane.getPosition()), new Vector3((1 - mWidthSwipe) * (xOffset - 0.5f), mPlane.getY(), mPlane.getZ()));
-        mAnimation.setDuration(50);
-        mAnimation.setRepeatMode(Animation3D.RepeatMode.NONE);
-        mAnimation.setTransformable3D(mPlane);
-        mAnimation.play();
-        return mAnimation;
-    }
 
-    @Override
-    public Animation3D getOffsetsAnimation(){
-        return mAnimation;
+        setX((1 - mWidthSwipe) * (xOffset - 0.5f));
     }
 
     @Override

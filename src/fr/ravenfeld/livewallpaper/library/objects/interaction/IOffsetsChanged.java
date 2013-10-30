@@ -16,9 +16,7 @@ import rajawali.animation.Animation3D;
 
 public interface IOffsetsChanged {
 
-	public Animation3D offsetsChanged(float xOffset);
-
-    public Animation3D getOffsetsAnimation();
+	public void offsetsChanged(float xOffset);
 
 	public SwipeDirection getSwipeDirection();
 
