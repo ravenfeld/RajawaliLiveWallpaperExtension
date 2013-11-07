@@ -82,7 +82,6 @@ public class BackgroundFixedEffect extends AImage {
 		} else if (mTexture2.getTextureName().equalsIgnoreCase(nameTexture)) {
 			mTexture2.setResourceId(resourceId);
 		}
-
 	}
 
 	public void setTexture(String nameTexture, Bitmap bitmap) {
@@ -91,7 +90,6 @@ public class BackgroundFixedEffect extends AImage {
 		} else if (mTexture2.getTextureName().equalsIgnoreCase(nameTexture)) {
 			mTexture2.setBitmap(bitmap);
 		}
-
 	}
 
 	public Texture[] getTextures() {

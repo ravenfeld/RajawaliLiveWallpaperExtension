@@ -49,7 +49,6 @@ public class BackgroundFixed extends AImage {
 		mPlane.setMaterial(mMaterial);
 		mPlane.setPosition(0, 0, 0);
 		mPlane.setRotY(180);
-        mPlane.setTransparent(true);
 	}
 
 	public void setFrom(BackgroundFixed other) {

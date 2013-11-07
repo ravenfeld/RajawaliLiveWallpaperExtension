@@ -36,7 +36,6 @@ public class BackgroundGIFFixed extends AImageGIF {
 		mPlane.setMaterial(mMaterial);
 		mPlane.setPosition(0, 0, 0);
 		mPlane.setRotY(180);
-        mPlane.setTransparent(true);
 	}
 
 	public BackgroundGIFFixed(BackgroundGIFFixed other) {

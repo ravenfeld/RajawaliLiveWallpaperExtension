@@ -12,6 +12,8 @@
  */
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
+import android.graphics.Bitmap;
+
 import rajawali.materials.Material;
 import rajawali.materials.plugins.SpriteSheetMaterialPlugin;
 import rajawali.materials.textures.ATexture;
@@ -33,7 +35,8 @@ public class BackgroundSpriteSheetFixed extends AImage {
 	public BackgroundSpriteSheetFixed(String nameTexture, int resourceId,
 			int numTilesX, int numTilesY, int numFrames)
 			throws TextureException {
-		init(nameTexture, resourceId);
+        mTexture = new Texture(nameTexture, resourceId);
+		init();
 		mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
 				numFrames);
 		mNumTilesX = numTilesX;
@@ -44,7 +47,8 @@ public class BackgroundSpriteSheetFixed extends AImage {
 	public BackgroundSpriteSheetFixed(String nameTexture, int resourceId,
 			int numTilesX, int numTilesY, int fps, int numFrames)
 			throws TextureException {
-		init(nameTexture, resourceId);
+        mTexture = new Texture(nameTexture, resourceId);
+		init();
 		mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY, fps,
 				numFrames);
 		mNumTilesX = numTilesX;
@@ -55,13 +59,56 @@ public class BackgroundSpriteSheetFixed extends AImage {
 	public BackgroundSpriteSheetFixed(String nameTexture, int resourceId,
 			int numTilesX, int numTilesY, long[] frameDurations)
 			throws TextureException {
-		init(nameTexture, resourceId);
+        mTexture = new Texture(nameTexture, resourceId);
+		init();
 		mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
 				frameDurations);
 		mNumTilesX = numTilesX;
 		mNumTilesY = numTilesY;
 		initPlugin();
 	}
+
+    public BackgroundSpriteSheetFixed(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY) throws TextureException {
+        this(nameTexture, bitmap, numTilesX, numTilesY, numTilesX
+                * numTilesY);
+    }
+
+    public BackgroundSpriteSheetFixed(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, int numFrames)
+            throws TextureException {
+        mTexture = new Texture(nameTexture, bitmap);
+        init();
+        mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
+                numFrames);
+        mNumTilesX = numTilesX;
+        mNumTilesY = numTilesY;
+        initPlugin();
+    }
+
+    public BackgroundSpriteSheetFixed(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, int fps, int numFrames)
+            throws TextureException {
+        mTexture = new Texture(nameTexture, bitmap);
+        init();
+        mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY, fps,
+                numFrames);
+        mNumTilesX = numTilesX;
+        mNumTilesY = numTilesY;
+        initPlugin();
+    }
+
+    public BackgroundSpriteSheetFixed(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, long[] frameDurations)
+            throws TextureException {
+        mTexture = new Texture(nameTexture, bitmap);
+        init();
+        mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
+                frameDurations);
+        mNumTilesX = numTilesX;
+        mNumTilesY = numTilesY;
+        initPlugin();
+    }
 
 	public BackgroundSpriteSheetFixed(BackgroundSpriteSheetFixed other) {
 		setFrom(other);
@@ -72,9 +119,8 @@ public class BackgroundSpriteSheetFixed extends AImage {
 		return new BackgroundSpriteSheetFixed(this);
 	}
 
-	private void init(String nameTexture, int resourceID)
+	private void init()
 			throws TextureException {
-		mTexture = new Texture(nameTexture, resourceID);
 		mPlane = new Plane(1f, 1f, 1, 1);
 		mMaterial = new Material();
         mMaterial.setColorInfluence(0);
@@ -82,7 +128,6 @@ public class BackgroundSpriteSheetFixed extends AImage {
 		mPlane.setMaterial(mMaterial);
 		mPlane.setPosition(0, 0, 0);
 		mPlane.setRotY(180);
-        mPlane.setTransparent(true);
 	}
 
 	private void initPlugin() {

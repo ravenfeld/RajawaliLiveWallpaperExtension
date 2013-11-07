@@ -42,7 +42,6 @@ public class BackgroundSwipeEffect extends BackgroundFixedEffect implements IOff
         setSwipeDirection(direction);
     }
 
-
     public BackgroundSwipeEffect(String nameTexture1, Bitmap bitmap1,
                                  String nameTexture2, Bitmap bitmap2)
             throws TextureException {

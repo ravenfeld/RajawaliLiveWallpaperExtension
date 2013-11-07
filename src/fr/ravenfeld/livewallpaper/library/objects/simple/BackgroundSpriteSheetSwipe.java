@@ -12,6 +12,8 @@
  */
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
+import android.graphics.Bitmap;
+
 import rajawali.materials.textures.ATexture.TextureException;
 import fr.ravenfeld.livewallpaper.library.objects.interaction.IOffsetsChanged;
 import fr.ravenfeld.livewallpaper.library.objects.interaction.SwipeDirection;
@@ -77,6 +79,61 @@ public class BackgroundSpriteSheetSwipe extends BackgroundSpriteSheetFixed
         setSwipeDirection(direction);
     }
 
+    public BackgroundSpriteSheetSwipe(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY)
+            throws TextureException {
+        this(nameTexture, bitmap, numTilesX, numTilesY,
+                SwipeDirection.NORMAL);
+    }
+
+    public BackgroundSpriteSheetSwipe(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, SwipeDirection direction)
+            throws TextureException {
+        super(nameTexture, bitmap, numTilesX, numTilesY);
+        setSwipeDirection(direction);
+    }
+
+    public BackgroundSpriteSheetSwipe(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, int numFrames)
+            throws TextureException {
+        this(nameTexture, bitmap, numTilesX, numTilesY, numFrames,
+                SwipeDirection.NORMAL);
+    }
+
+    public BackgroundSpriteSheetSwipe(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, int numFrames,
+                                      SwipeDirection direction) throws TextureException {
+        super(nameTexture, bitmap, numTilesX, numTilesY, numFrames);
+        setSwipeDirection(direction);
+    }
+
+    public BackgroundSpriteSheetSwipe(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, int fps, int numFrames)
+            throws TextureException {
+        this(nameTexture, bitmap, numTilesX, numTilesY, fps, numFrames,
+                SwipeDirection.NORMAL);
+    }
+
+    public BackgroundSpriteSheetSwipe(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, int fps, int numFrames,
+                                      SwipeDirection direction) throws TextureException {
+        super(nameTexture, bitmap, numTilesX, numTilesY, fps, numFrames);
+        setSwipeDirection(direction);
+    }
+
+    public BackgroundSpriteSheetSwipe(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, long[] frameDurations)
+            throws TextureException {
+        this(nameTexture, bitmap, numTilesX, numTilesY, frameDurations,
+                SwipeDirection.NORMAL);
+    }
+
+    public BackgroundSpriteSheetSwipe(String nameTexture, Bitmap bitmap,
+                                      int numTilesX, int numTilesY, long[] frameDurations,
+                                      SwipeDirection direction) throws TextureException {
+        super(nameTexture, bitmap, numTilesX, numTilesY, frameDurations);
+        setSwipeDirection(direction);
+    }
     public BackgroundSpriteSheetSwipe(BackgroundSpriteSheetSwipe other) {
         super(other);
         setFrom(other);

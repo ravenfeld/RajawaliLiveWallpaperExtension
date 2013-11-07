@@ -13,6 +13,8 @@
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
 
+import android.graphics.Bitmap;
+
 import rajawali.materials.textures.ATexture.TextureException;
 import fr.ravenfeld.livewallpaper.library.objects.interaction.IOffsetsChanged;
 import fr.ravenfeld.livewallpaper.library.objects.interaction.SwipeDirection;
@@ -26,9 +28,20 @@ public class BackgroundSwipe extends BackgroundFixed implements IOffsetsChanged 
         this(nameTexture, resourceId, SwipeDirection.NORMAL);
     }
 
+    public BackgroundSwipe(String nameTexture, Bitmap bitmap)
+            throws TextureException {
+        this(nameTexture, bitmap, SwipeDirection.NORMAL);
+    }
+
     public BackgroundSwipe(String nameTexture, int resourceId,
                            SwipeDirection direction) throws TextureException {
         super(nameTexture, resourceId);
+        setSwipeDirection(direction);
+    }
+
+    public BackgroundSwipe(String nameTexture, Bitmap bitmap,
+                           SwipeDirection direction) throws TextureException {
+        super(nameTexture, bitmap);
         setSwipeDirection(direction);
     }
 

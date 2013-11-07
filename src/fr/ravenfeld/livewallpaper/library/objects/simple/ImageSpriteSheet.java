@@ -12,6 +12,8 @@
  */
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
+import android.graphics.Bitmap;
+
 import rajawali.materials.Material;
 import rajawali.materials.plugins.SpriteSheetMaterialPlugin;
 import rajawali.materials.textures.ATexture;
@@ -34,7 +36,8 @@ public class ImageSpriteSheet extends AImage {
 	public ImageSpriteSheet(String nameTexture, int resourceId,float size,
                             int numTilesX, int numTilesY, int numFrames)
 			throws TextureException {
-		init(nameTexture, resourceId,size);
+        mTexture = new Texture(nameTexture, resourceId);
+        init(size);
 		mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
 				numFrames);
 		mNumTilesX = numTilesX;
@@ -45,7 +48,8 @@ public class ImageSpriteSheet extends AImage {
 	public ImageSpriteSheet(String nameTexture, int resourceId,float size,
                             int numTilesX, int numTilesY, int fps, int numFrames)
 			throws TextureException {
-		init(nameTexture, resourceId,size);
+        mTexture = new Texture(nameTexture, resourceId);
+        init(size);
 		mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY, fps,
 				numFrames);
 		mNumTilesX = numTilesX;
@@ -56,13 +60,56 @@ public class ImageSpriteSheet extends AImage {
 	public ImageSpriteSheet(String nameTexture, int resourceId,float size,
                             int numTilesX, int numTilesY, long[] frameDurations)
 			throws TextureException {
-		init(nameTexture, resourceId,size);
+        mTexture = new Texture(nameTexture, resourceId);
+        init(size);
 		mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
 				frameDurations);
 		mNumTilesX = numTilesX;
 		mNumTilesY = numTilesY;
 		initPlugin();
 	}
+
+    public ImageSpriteSheet(String nameTexture, Bitmap bitmap,float size,
+                            int numTilesX, int numTilesY) throws TextureException {
+        this(nameTexture, bitmap,size, numTilesX, numTilesY, numTilesX
+                * numTilesY);
+    }
+
+    public ImageSpriteSheet(String nameTexture, Bitmap bitmap,float size,
+                            int numTilesX, int numTilesY, int numFrames)
+            throws TextureException {
+        mTexture = new Texture(nameTexture, bitmap);
+        init(size);
+        mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
+                numFrames);
+        mNumTilesX = numTilesX;
+        mNumTilesY = numTilesY;
+        initPlugin();
+    }
+
+    public ImageSpriteSheet(String nameTexture, Bitmap bitmap,float size,
+                            int numTilesX, int numTilesY, int fps, int numFrames)
+            throws TextureException {
+        mTexture = new Texture(nameTexture, bitmap);
+        init(size);
+        mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY, fps,
+                numFrames);
+        mNumTilesX = numTilesX;
+        mNumTilesY = numTilesY;
+        initPlugin();
+    }
+
+    public ImageSpriteSheet(String nameTexture, Bitmap bitmap,float size,
+                            int numTilesX, int numTilesY, long[] frameDurations)
+            throws TextureException {
+        mTexture = new Texture(nameTexture, bitmap);
+        init(size);
+        mSpriteSheet = new SpriteSheetMaterialPlugin(numTilesX, numTilesY,
+                frameDurations);
+        mNumTilesX = numTilesX;
+        mNumTilesY = numTilesY;
+        initPlugin();
+    }
 
 	public ImageSpriteSheet(ImageSpriteSheet other) {
 		setFrom(other);
@@ -73,10 +120,9 @@ public class ImageSpriteSheet extends AImage {
 		return new ImageSpriteSheet(this);
 	}
 
-	private void init(String nameTexture, int resourceID, float size)
+	private void init(float size)
 			throws TextureException {
         mSize=size;
-		mTexture = new Texture(nameTexture, resourceID);
 		mPlane = new Plane(1f, 1f, 1, 1);
 		mMaterial = new Material();
         mMaterial.setColorInfluence(0);
@@ -84,7 +130,6 @@ public class ImageSpriteSheet extends AImage {
 		mPlane.setMaterial(mMaterial);
 		mPlane.setPosition(0, 0, 0);
 		mPlane.setRotY(180);
-        mPlane.setTransparent(true);
 	}
 
 	private void initPlugin() {
