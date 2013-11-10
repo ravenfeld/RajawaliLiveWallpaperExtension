@@ -14,16 +14,9 @@ package fr.ravenfeld.livewallpaper.library.objects.simple;
 
 import android.graphics.Bitmap;
 
-import fr.ravenfeld.livewallpaper.library.objects.animation.SwitchTextureAnimation;
 import fr.ravenfeld.livewallpaper.library.objects.interaction.IOffsetsChanged;
 import fr.ravenfeld.livewallpaper.library.objects.interaction.SwipeDirection;
-import rajawali.animation.Animation3D;
-import rajawali.animation.TranslateAnimation3D;
-import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
-import rajawali.materials.textures.Texture;
-import rajawali.math.vector.Vector3;
-import rajawali.primitives.Plane;
 
 public class BackgroundSwipeEffect extends BackgroundFixedEffect implements IOffsetsChanged {
     protected float mWidthSwipe;

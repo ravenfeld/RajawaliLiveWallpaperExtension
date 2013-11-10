@@ -12,8 +12,9 @@
  */
 package fr.ravenfeld.livewallpaper.library.objects.simple;
 
-import fr.ravenfeld.livewallpaper.library.objects.animation.SwitchTextureAnimation;
+import rajawali.animation.Animation;
 import rajawali.animation.Animation3D;
+import rajawali.animation.SwitchAnimationTexture;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.Texture;
@@ -24,7 +25,7 @@ public class BackgroundFixedEffect extends AImage {
 	protected Texture mTexture1;
 	protected Texture mTexture2;
 	private boolean mSens = true;
-    private SwitchTextureAnimation mSwitchTextureAnimation;
+    private SwitchAnimationTexture mSwitchAnimationTexture;
 
 	public BackgroundFixedEffect(String nameTexture1, int resourceId1,
 			String nameTexture2, int resourceId2)
@@ -62,11 +63,10 @@ public class BackgroundFixedEffect extends AImage {
 		mPlane.setMaterial(mMaterial);
 		mPlane.setPosition(0, 0, 0);
 		mPlane.setRotY(180);
-        mSwitchTextureAnimation = new SwitchTextureAnimation();
-        mSwitchTextureAnimation.setRepeatMode(Animation3D.RepeatMode.REVERSE_INFINITE);
-        mSwitchTextureAnimation.setTransformable3D(getObject3D());
-        mSwitchTextureAnimation.setTextures(getTextures());
-        mSwitchTextureAnimation.play();
+        mSwitchAnimationTexture = new SwitchAnimationTexture();
+        mSwitchAnimationTexture.setRepeatMode(Animation.RepeatMode.REVERSE_INFINITE);
+        mSwitchAnimationTexture.setTextures(getTextures());
+        mSwitchAnimationTexture.play();
 	}
 
 	public void setFrom(BackgroundFixedEffect other) {
@@ -123,11 +123,11 @@ public class BackgroundFixedEffect extends AImage {
         mTexture2.reset();
     }
 
-    public SwitchTextureAnimation getSwitchTextureAnimation(){
-        return mSwitchTextureAnimation;
+    public SwitchAnimationTexture getSwitchTextureAnimation(){
+        return mSwitchAnimationTexture;
     }
 
     public void setDuration(long duration){
-        mSwitchTextureAnimation.setDuration(duration);
+        mSwitchAnimationTexture.setDuration(duration);
     }
 }
