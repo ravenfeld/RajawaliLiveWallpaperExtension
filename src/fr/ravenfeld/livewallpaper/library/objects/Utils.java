@@ -11,16 +11,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 
 public class Utils {
-
     public static Bitmap compositeDrawableWithMask(
             Bitmap rgbBitmap, Bitmap alphaBitmap) {
+        return Utils.compositeDrawableWithMask(rgbBitmap, alphaBitmap, true);
+    }
+
+    public static Bitmap compositeDrawableWithMask(
+            Bitmap rgbBitmap, Bitmap alphaBitmap, boolean recycle) {
 
         int width = rgbBitmap.getWidth();
         int height = rgbBitmap.getHeight();
         if (width != alphaBitmap.getWidth() || height != alphaBitmap.getHeight()) {
             throw new IllegalStateException("image size mismatch!");
         }
-
         Bitmap destBitmap = Bitmap.createBitmap(width, height,
                 Bitmap.Config.ARGB_8888);
 
@@ -36,8 +39,10 @@ public class Utils {
             }
             destBitmap.setPixels(pixels, 0, width, 0, y, width, 1);
         }
-        rgbBitmap.recycle();
-        alphaBitmap.recycle();
+        if (recycle) {
+            rgbBitmap.recycle();
+            alphaBitmap.recycle();
+        }
         return destBitmap;
     }
 

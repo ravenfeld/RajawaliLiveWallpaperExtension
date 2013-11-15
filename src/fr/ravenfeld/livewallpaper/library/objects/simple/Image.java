@@ -53,6 +53,7 @@ public class Image extends AImage {
 		mMaterial.addTexture(mTexture);
 		mPlane.setMaterial(mMaterial);
 		mPlane.setPosition(0, 0, 0);
+        mPlane.setRotY(180);
 	}
 
 	public void setFrom(Image other) {
