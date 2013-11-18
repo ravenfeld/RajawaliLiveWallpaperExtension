@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -88,24 +89,74 @@ public class Utils {
     public static Bitmap decodeUri(Context context, Uri selectedImage,
                                    int widthMinimum, int heightMinimum)
             throws FileNotFoundException {
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(context.getContentResolver()
-                .openInputStream(selectedImage), null, o);
 
-        int width_tmp = o.outWidth;
-        int height_tmp = o.outHeight;
-
-        int scale = 1;
-        while (width_tmp > widthMinimum || height_tmp > heightMinimum) {
-
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
+        Bitmap destBitmap = BitmapFactory.decodeStream(context.getContentResolver()
+                .openInputStream(selectedImage), null, null);
+        int width_tmp = destBitmap.getWidth();
+        int height_tmp = destBitmap.getHeight();
+        float ratioSize;
+        if (heightMinimum < widthMinimum) {
+            ratioSize = (float) heightMinimum / (float) height_tmp;
+        } else {
+            ratioSize = (float) widthMinimum / (float) width_tmp;
         }
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        return BitmapFactory.decodeStream(context.getContentResolver()
-                .openInputStream(selectedImage), null, o2);
+        return Bitmap.createScaledBitmap(destBitmap, (int) (width_tmp * ratioSize), (int) (height_tmp * ratioSize), true);
+    }
+
+
+    public static Bitmap decodeResource(Context context, int selectedImage) {
+        WallpaperManager wallpaperManager = WallpaperManager
+                .getInstance(context);
+        final int REQUIRED_SIZE_WIDTH = wallpaperManager
+                .getDesiredMinimumWidth();
+        final int REQUIRED_SIZE_HEIGHT = wallpaperManager
+                .getDesiredMinimumHeight();
+        return Utils.decodeResource(context, selectedImage, REQUIRED_SIZE_WIDTH, REQUIRED_SIZE_HEIGHT);
+    }
+
+    public static Bitmap decodeResource(Context context, int selectedImage,
+                                        int widthMinimum, int heightMinimum) {
+
+        Bitmap destBitmap = BitmapFactory.decodeResource(context.getResources(), selectedImage);
+        int width_tmp = destBitmap.getWidth();
+        int height_tmp = destBitmap.getHeight();
+        float ratioSize;
+        if (heightMinimum < widthMinimum) {
+            ratioSize = (float) heightMinimum / (float) height_tmp;
+        } else {
+            ratioSize = (float) widthMinimum / (float) width_tmp;
+        }
+        return Bitmap.createScaledBitmap(destBitmap, (int) (width_tmp * ratioSize), (int) (height_tmp * ratioSize), true);
+    }
+
+    public static Bitmap decodeResource(Context context, int selectedImage,
+                                        float scale) {
+        Bitmap destBitmap = BitmapFactory.decodeResource(context.getResources(), selectedImage);
+        int width_tmp = destBitmap.getWidth();
+        int height_tmp = destBitmap.getHeight();
+
+        return Bitmap.createScaledBitmap(destBitmap, (int) (width_tmp * scale), (int) (height_tmp * scale), true);
+    }
+
+
+    public static float ratioSize(Context context, int selectedBackground){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds= true;
+        BitmapFactory.decodeResource(context.getResources(),selectedBackground,options);
+        int width_tmp = options.outWidth;
+        int height_tmp = options.outHeight;
+
+        WallpaperManager wallpaperManager = WallpaperManager
+                .getInstance(context);
+        final int REQUIRED_SIZE_WIDTH = wallpaperManager
+                .getDesiredMinimumWidth();
+        final int REQUIRED_SIZE_HEIGHT = wallpaperManager
+                .getDesiredMinimumHeight();
+
+        if(REQUIRED_SIZE_HEIGHT<REQUIRED_SIZE_WIDTH){
+            return (float)REQUIRED_SIZE_HEIGHT/(float)height_tmp;
+        }else{
+            return (float)REQUIRED_SIZE_WIDTH/(float)width_tmp;
+        }
     }
 }
