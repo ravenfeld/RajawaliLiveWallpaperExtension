@@ -12,6 +12,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 
 public class Utils {
+    private static int SIZE_MAX = 2048;
+
     public static Bitmap compositeDrawableWithMask(
             Bitmap rgbBitmap, Bitmap alphaBitmap) {
         return Utils.compositeDrawableWithMask(rgbBitmap, alphaBitmap, true);
@@ -100,7 +102,7 @@ public class Utils {
         } else {
             ratioSize = (float) widthMinimum / (float) width_tmp;
         }
-        return Bitmap.createScaledBitmap(destBitmap, (int) (width_tmp * ratioSize), (int) (height_tmp * ratioSize), true);
+        return Bitmap.createScaledBitmap(destBitmap, nextPowerOfTwo((int) (width_tmp * ratioSize)), nextPowerOfTwo((int) (height_tmp * ratioSize)), true);
     }
 
 
@@ -126,7 +128,10 @@ public class Utils {
         } else {
             ratioSize = (float) widthMinimum / (float) width_tmp;
         }
-        return Bitmap.createScaledBitmap(destBitmap, (int) (width_tmp * ratioSize), (int) (height_tmp * ratioSize), true);
+        if(ratioSize>1){
+            ratioSize=1;
+        }
+        return Bitmap.createScaledBitmap(destBitmap, nextPowerOfTwo((int) (width_tmp * ratioSize)), nextPowerOfTwo((int) (height_tmp * ratioSize)), true);
     }
 
     public static Bitmap decodeResource(Context context, int selectedImage,
@@ -134,15 +139,17 @@ public class Utils {
         Bitmap destBitmap = BitmapFactory.decodeResource(context.getResources(), selectedImage);
         int width_tmp = destBitmap.getWidth();
         int height_tmp = destBitmap.getHeight();
-
-        return Bitmap.createScaledBitmap(destBitmap, (int) (width_tmp * scale), (int) (height_tmp * scale), true);
+        if(scale>1){
+            scale=1;
+        }
+        return Bitmap.createScaledBitmap(destBitmap, nextPowerOfTwo((int) (width_tmp * scale)), nextPowerOfTwo((int) (height_tmp * scale)), true);
     }
 
 
-    public static float ratioSize(Context context, int selectedBackground){
+    public static float ratioSize(Context context, int selectedBackground) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds= true;
-        BitmapFactory.decodeResource(context.getResources(),selectedBackground,options);
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(context.getResources(), selectedBackground, options);
         int width_tmp = options.outWidth;
         int height_tmp = options.outHeight;
 
@@ -153,10 +160,32 @@ public class Utils {
         final int REQUIRED_SIZE_HEIGHT = wallpaperManager
                 .getDesiredMinimumHeight();
 
-        if(REQUIRED_SIZE_HEIGHT<REQUIRED_SIZE_WIDTH){
-            return (float)REQUIRED_SIZE_HEIGHT/(float)height_tmp;
-        }else{
-            return (float)REQUIRED_SIZE_WIDTH/(float)width_tmp;
+        if (REQUIRED_SIZE_HEIGHT < REQUIRED_SIZE_WIDTH) {
+            return (float) REQUIRED_SIZE_HEIGHT / (float) height_tmp;
+        } else {
+            return (float) REQUIRED_SIZE_WIDTH / (float) width_tmp;
         }
+    }
+
+    public static int nextPowerOfTwo(long x) {
+        int i = 2;
+        double pow = 1;
+
+        boolean powerOfTwo = false;
+        while (i < SIZE_MAX && !powerOfTwo) {
+            if (i >= x) {
+                powerOfTwo = true;
+            } else {
+
+                i = (int) Math.pow(2, pow);
+                pow++;
+            }
+        }
+        //Log.e("TEST","SIZE FINAL "+i+" SIZE INIT "+x);
+        return i;
+    }
+
+    public static boolean isPowerOfTwo(long x) {
+        return (x != 0) && ((x & (x - 1)) == 0);
     }
 }

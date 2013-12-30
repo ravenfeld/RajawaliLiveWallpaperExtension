@@ -11,6 +11,10 @@ public abstract class AElement {
     protected Material mMaterial;
     protected Plane mPlane;
 
+    public void setMaterial(Material material) {
+        mMaterial = material;
+    }
+
     public Material getMaterial() {
         return mMaterial;
     }
