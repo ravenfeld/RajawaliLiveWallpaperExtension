@@ -63,7 +63,6 @@ public class Text extends AElement {
     public Text(Context context,String textureName, String text, int textSize, int width, int height, int layoutGravity) {
         mContext = context;
         mWidgetGroup = new FrameLayout(mContext);
-        mWidgetGroup.setBackgroundColor(Color.TRANSPARENT);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         mLayoutGravity = layoutGravity;
@@ -248,9 +247,9 @@ public class Text extends AElement {
             text = "";
             for (int i = 0; i < split.length; i++) {
                 String string = split[i];
-                int nextPos = p.breakText(string, false, mWidthMax, null);
+                int nextPos = p.breakText(string, true, mWidthMax, null);
 
-				
+
                 if (nextPos < string.length()) {
                     while(string.charAt(nextPos)!=' ' && nextPos>0){
                         nextPos--;

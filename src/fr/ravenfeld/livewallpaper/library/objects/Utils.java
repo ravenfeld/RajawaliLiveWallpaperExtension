@@ -167,7 +167,7 @@ public class Utils {
         }
     }
 
-    public static int nextPowerOfTwo(long x) {
+    public static int nextPowerOfTwo(float x) {
         int i = 2;
         double pow = 1;
 
