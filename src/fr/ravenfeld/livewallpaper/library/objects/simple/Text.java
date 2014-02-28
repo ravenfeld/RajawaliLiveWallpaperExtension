@@ -241,7 +241,9 @@ public class Text extends AElement {
         while (lineWidth > mWidthMax) {
             String text = mText.toString();
             String[] split = text.split("\n");
-
+            if(split.length==1){
+                new Exception("Error size");
+            }
             text = "";
             for (int i = 0; i < split.length; i++) {
                 String string = split[i];
@@ -269,7 +271,6 @@ public class Text extends AElement {
 
     private void draw() {
         splitLines();
-
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         mPaint.setTextSize(mTextSize);
 
