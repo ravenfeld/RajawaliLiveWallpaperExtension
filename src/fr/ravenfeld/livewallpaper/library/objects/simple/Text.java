@@ -38,36 +38,38 @@ import rajawali.primitives.Plane;
 
 public class Text extends AElement {
     protected Texture mTexture;
-    protected TextView mText;
+    protected String mText;
     private Bitmap mBitmap;
     private Canvas mCanvas;
-    private final FrameLayout mWidgetGroup;
     private final Context mContext;
     private int mWidth;
     private int mHeight;
     private int mLayoutGravity;
     private int mWidthMax;
-    public Text(Context context,String textureName, String text) {
-        this(context,textureName, text, 14);
+    private int mHeightMax;
+    private float mTextSize;
+    private Paint mPaint;
+    private int mColorText;
+    private int mColorBackgroundText;
+    private int mColorBackgroundLayout;
+
+    public Text(Context context, String textureName, String text) {
+        this(context, textureName, text, 14);
     }
 
-    public Text(Context context,String textureName, String text, int textSize) {
-        this(context,textureName, text, textSize, Gravity.CENTER);
+    public Text(Context context, String textureName, String text, int textSize) {
+        this(context, textureName, text, textSize, Gravity.CENTER);
     }
 
 
-    public Text(Context context,String textureName, String text, int textSize, int layoutGravity) {
-        this(context,textureName, text, textSize, getDisplayWidth(context), getDisplayHeight(context), layoutGravity);
+    public Text(Context context, String textureName, String text, float textSize, int layoutGravity) {
+        this(context, textureName, text, textSize, getDisplayWidth(context), getDisplayHeight(context), layoutGravity);
     }
 
-    public Text(Context context,String textureName, String text, int textSize, int width, int height, int layoutGravity) {
+    public Text(Context context, String textureName, String text, float textSize, int width, int height, int layoutGravity) {
         mContext = context;
-        mWidgetGroup = new FrameLayout(mContext);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        mLayoutGravity = layoutGravity;
-        mWidgetGroup.setLayoutParams(params);
-        mText = new TextView(mContext);
+        mText = text;
+        mTextSize = textSize;
         mPlane = new Plane(1f, 1f, 1, 1);
         mPlane.setColor(Color.TRANSPARENT);
         mPlane.setTransparent(true);
@@ -76,16 +78,24 @@ public class Text extends AElement {
         mWidth = Utils.nextPowerOfTwo(width);
         mHeight = Utils.nextPowerOfTwo(height);
         mWidthMax = width;
+        mHeightMax = height;
+
+        mPaint = new Paint();
+
+        mPaint.setStrokeWidth(0);
+        mPaint.setAntiAlias(true);
+
+        mColorText = Color.BLACK;
+        mColorBackgroundText = Color.TRANSPARENT;
+        mColorBackgroundLayout = Color.TRANSPARENT;
 
         mMaterial = new Material();
         mMaterial.setColorInfluence(0);
+        mLayoutGravity = layoutGravity;
 
-        mText.setText(text);
-        mText.setTextSize(textSize);
-        mText.setGravity(Gravity.LEFT);
-        //mText.setBackgroundColor(Color.GREEN);
-        mWidgetGroup.addView(mText);
-        mWidgetGroup.setBackgroundColor(Color.TRANSPARENT);
+        mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+        mCanvas = new Canvas(mBitmap);
+
         draw();
 
         mTexture = new Texture(textureName, mBitmap);
@@ -98,8 +108,6 @@ public class Text extends AElement {
         }
         mPlane.setMaterial(mMaterial);
     }
-
-
 
 
     private static int getDisplayWidth(Context context) {
@@ -118,61 +126,52 @@ public class Text extends AElement {
         return size.y;
     }
 
-    public void setWidgetBackgroundColor(int color) {
-        mWidgetGroup.setBackgroundColor(color);
+
+    public void setGravity(int gravity) {
+        mLayoutGravity = gravity;
+        draw();
+    }
+
+    public void setBackgroundColorLayout(int color) {
+        mColorBackgroundLayout = color;
         draw();
     }
 
     public void setBackgroundColor(int color) {
-        mText.setBackgroundColor(color);
-        draw();
-    }
-
-    public void setBackground(Drawable drawable) {
-        mText.setBackground(drawable);
-        draw();
-    }
-
-    public void setBackgroundResource(int resId) {
-        mText.setBackgroundResource(resId);
+        mColorBackgroundText = color;
         draw();
     }
 
     public void setTextColor(int color) {
-        mText.setTextColor(color);
-        draw();
-    }
-
-    public void setTextColor(ColorStateList colors) {
-        mText.setTextColor(colors);
+        mColorText = color;
         draw();
     }
 
     public void setText(String text) {
-        mText.setText(text);
+        mText = text;
         draw();
     }
 
-    public float getTextSize() {
-        return mText.getTextSize();
-    }
 
-    public void setTextSize(float textSize) {
-        mText.setTextSize(textSize);
+        public float getTextSize() {
+            return mTextSize;
+        }
+
+   public void setTextSize(float textSize) {
+       mTextSize=textSize;
         draw();
     }
 
     public String getText() {
-        return mText.getText().toString();
+        return mText.toString();
     }
 
     public void setFont(String font) {
         Typeface type = Typeface.createFromAsset(mContext.getAssets(),
                 font);
-        mText.setTypeface(type);
+        mPaint.setTypeface(type);
         draw();
     }
-
 
 
     public Plane getObject3D() {
@@ -215,20 +214,20 @@ public class Text extends AElement {
     }
 
     private int nbLines() {
-        String text = mText.getText().toString();
+        String text = mText.toString();
         String[] split = text.split("\n");
         return split.length;
     }
 
     private int getLineWidth() {
-        Paint textPaint = mText.getPaint();
-        String text = mText.getText().toString();
+
+        String text = mText.toString();
 
         String[] split = text.split("\n");
         int widthMax = 0;
 
         for (int i = 0; i < split.length; i++) {
-            int width = Math.round(textPaint.measureText(split[i].trim()));
+            int width = Math.round(mPaint.measureText(split[i].trim()));
             if (width > widthMax) {
                 widthMax = width;
             }
@@ -237,25 +236,24 @@ public class Text extends AElement {
         return widthMax;
     }
 
-	private void splitLines(){
+    private void splitLines() {
         int lineWidth = getLineWidth();
         while (lineWidth > mWidthMax) {
-
-            String text = mText.getText().toString();
+            String text = mText.toString();
             String[] split = text.split("\n");
-            Paint p = mText.getPaint();
+
             text = "";
             for (int i = 0; i < split.length; i++) {
                 String string = split[i];
-                int nextPos = p.breakText(string, true, mWidthMax, null);
+                int nextPos = mPaint.breakText(string, true, mWidthMax, null);
 
 
                 if (nextPos < string.length()) {
-                    while(string.charAt(nextPos)!=' ' && nextPos>0){
+                    while (string.charAt(nextPos) != ' ' && nextPos > 0) {
                         nextPos--;
                     }
-					String stringLeft = string.substring(0, nextPos);
-					String stringRight= string.substring(nextPos, string.length());
+                    String stringLeft = string.substring(0, nextPos);
+                    String stringRight = string.substring(nextPos, string.length());
                     string = stringLeft + "\n" + stringRight.trim();
                 }
                 if (text.equalsIgnoreCase("")) {
@@ -264,88 +262,102 @@ public class Text extends AElement {
                     text = text + "\n" + string;
                 }
             }
-            mText.setText(text);
+            mText = text;
             lineWidth = getLineWidth();
         }
-	}
+    }
 
     private void draw() {
-		splitLines();
-        int lineWidth = getLineWidth();
-        int lineHeight = Math.round(mText.getLineHeight() * nbLines());
-        mWidgetGroup.measure(mWidth, mHeight);
-        mWidgetGroup.layout(0, 0, mWidth, mHeight);
+        splitLines();
 
-        int posX =0;
-        int posY = 0;
-        switch (mLayoutGravity){
-            case Gravity.LEFT:
-                posX =0;
-                break;
-            case Gravity.RIGHT:
-                posX=(int) (mWidth - lineWidth);
-                break;
-            case Gravity.CENTER_HORIZONTAL:
-                posX=(int) (mWidth / 2f - lineWidth / 2f);
-                break;
-            case Gravity.LEFT|Gravity.TOP:
-                posX =0;
-                posY = 0;
-                break;
-            case Gravity.RIGHT|Gravity.TOP:
-                posX=(int) (mWidth - lineWidth);
-                posY = 0;
-                break;
-            case Gravity.CENTER_HORIZONTAL|Gravity.TOP:
-                posX=(int) (mWidth / 2f - lineWidth / 2f);
-                posY = 0;
-                break;
-            case Gravity.LEFT|Gravity.BOTTOM:
-                posX =0;
-                posY=mHeight-lineHeight;
-                break;
-            case Gravity.RIGHT|Gravity.BOTTOM:
-                posX=(int) (mWidth - lineWidth);
-                posY=mHeight-lineHeight;
-                break;
-            case Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM:
-                posX=(int) (mWidth / 2f - lineWidth / 2f);
-                posY=mHeight-lineHeight;
-                break;
-            case Gravity.LEFT|Gravity.CENTER_VERTICAL:
-                posX =0;
-                posY = (int) (mHeight / 2f - lineHeight / 2f);
-                break;
-            case Gravity.RIGHT|Gravity.CENTER_VERTICAL:
-                posX=(int) (mWidth - lineWidth);
-                posY = (int) (mHeight / 2f - lineHeight / 2f);
-                break;
-            case Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL:
-                posX=(int) (mWidth / 2f - lineWidth / 2f);
-                posY = (int) (mHeight / 2f - lineHeight / 2f);
-                break;
-            case Gravity.TOP:
-				posY = 0;
-				break;
-            case Gravity.BOTTOM:
-                posY=mHeight-lineHeight;
-                break;
-            case Gravity.CENTER_VERTICAL:
-                posY = (int) (mHeight / 2f - lineHeight / 2f);
-                break;
-        }
-        mText.layout(posX, posY, posX + lineWidth, posY + lineHeight);
-        if (mBitmap == null) {
-            mBitmap = Bitmap.createBitmap(Utils.nextPowerOfTwo(mWidgetGroup.getWidth()),
-                    Utils.nextPowerOfTwo(mWidgetGroup.getHeight()), Bitmap.Config.ARGB_8888);
-        }
-        if (mCanvas == null) {
-            mCanvas = new Canvas(mBitmap);
-        }
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        mPaint.setTextSize(mTextSize);
 
-        mWidgetGroup.draw(mCanvas);
-        surfaceChanged(getDisplayWidth(mContext), getDisplayHeight(mContext));
+        int lineHeight = Math.round(mTextSize * (nbLines()-1));
+
+        String[] lines = mText.split("\n");
+
+        float left = mWidth / 2 - mWidthMax / 2;
+        float top = mHeight / 2 - mHeightMax / 2;
+        float right = left + mWidthMax;
+        float bottom = top + mHeightMax;
+        mPaint.setColor(mColorBackgroundLayout);
+        mCanvas.drawRect(left, top, right, bottom, mPaint);
+
+
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            float lineWidth = mPaint.measureText(line.trim());
+
+
+            float posX = left;
+            float posY = top + mTextSize * (i + 1) - (int) mPaint.descent();
+            switch (mLayoutGravity) {
+                case Gravity.LEFT:
+                    posX = left;
+                    break;
+                case Gravity.RIGHT:
+                    posX = (int) (right - lineWidth);
+                    break;
+                case Gravity.CENTER_HORIZONTAL:
+                    posX = (int) (mWidth / 2f - lineWidth / 2f);
+                    break;
+                case Gravity.LEFT | Gravity.TOP:
+                    posX = left;
+                    posY = top + mTextSize * (i + 1);
+                    break;
+                case Gravity.RIGHT | Gravity.TOP:
+                    posX = (int) (right - lineWidth);
+                    posY = top + mTextSize * (i + 1) - (int) mPaint.descent();
+                    break;
+                case Gravity.CENTER_HORIZONTAL | Gravity.TOP:
+                    posX = (int) (mWidth / 2f - lineWidth / 2f);
+                    posY = top + mTextSize * (i + 1) - (int) mPaint.descent();
+                    break;
+                case Gravity.LEFT | Gravity.BOTTOM:
+                    posX = left;
+                    posY = bottom - lineHeight + mTextSize * i - (int) mPaint.descent();
+                    break;
+                case Gravity.RIGHT | Gravity.BOTTOM:
+                    posX = (int) (right - lineWidth);
+                    posY = bottom - lineHeight + mTextSize * i - (int) mPaint.descent();
+                    break;
+                case Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM:
+                    posX = (int) (mWidth / 2f - lineWidth / 2f);
+                    posY = bottom - lineHeight + mTextSize * i - (int) mPaint.descent();
+                    break;
+                case Gravity.LEFT | Gravity.CENTER_VERTICAL:
+                    posX = left;
+                    posY = (int) (mHeight / 2f - lineHeight / 2f) + mTextSize * i;
+                    break;
+                case Gravity.RIGHT | Gravity.CENTER_VERTICAL:
+                    posX = (int) (right - lineWidth);
+                    posY = (int) (mHeight / 2f - lineHeight / 2f) + mTextSize * i;
+                    break;
+                case Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL:
+                    posX = (int) (mWidth / 2f - lineWidth / 2f);
+                    posY = (int) (mHeight / 2f - lineHeight / 2f) + mTextSize * i;
+                    break;
+                case Gravity.TOP:
+                    posY = top + mTextSize * (i + 1) - (int) mPaint.descent();
+                    break;
+                case Gravity.BOTTOM:
+                    posY = bottom - lineHeight + mTextSize * i - (int) mPaint.descent();
+                    break;
+                case Gravity.CENTER_VERTICAL:
+                    posY = (int) (mHeight / 2f - lineHeight / 2f) + mTextSize * i;
+                    break;
+            }
+
+            if (posY + (int) mPaint.ascent() >= top && posY + (int) mPaint.descent() <= bottom) {
+                mPaint.setColor(mColorBackgroundText);
+                mCanvas.drawRect(posX, posY + (int) mPaint.ascent(), posX + lineWidth, posY + (int) mPaint.descent(), mPaint);
+
+                mPaint.setColor(mColorText);
+
+                mCanvas.drawText(line, posX, posY, mPaint);
+            }
+        }
     }
 
     public Texture getTexture() {
