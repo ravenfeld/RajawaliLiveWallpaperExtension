@@ -48,5 +48,6 @@ public abstract class AImageGIF  extends  AElement{
     public void surfaceDestroyed() throws ATexture.TextureException {
         mMaterial.removeTexture(mTexture);
         mTexture.reset();
+        mTexture.remove();
     }
 }
